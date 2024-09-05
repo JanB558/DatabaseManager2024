@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPWebApp", "ASPWebApp\ASPW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPWebAPI", "ASPWebAPI\ASPWebAPI.csproj", "{C47A5E5C-8122-4A97-8038-45E7EA37B4B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBM_ConsoleApp", "DBM_ConsoleApp\DBM_ConsoleApp.csproj", "{375A4739-1D47-47D1-92E1-407C6CEE7C22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C47A5E5C-8122-4A97-8038-45E7EA37B4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C47A5E5C-8122-4A97-8038-45E7EA37B4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C47A5E5C-8122-4A97-8038-45E7EA37B4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375A4739-1D47-47D1-92E1-407C6CEE7C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375A4739-1D47-47D1-92E1-407C6CEE7C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375A4739-1D47-47D1-92E1-407C6CEE7C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375A4739-1D47-47D1-92E1-407C6CEE7C22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
