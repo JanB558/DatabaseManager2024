@@ -12,14 +12,14 @@ namespace ASPWebAPI.Context
         public CourseDBContext(DbContextOptions<CourseDBContext> options) : base(options)
         {
         }
-        /*
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Person>().ToTable("Person");
-            modelBuilder.Entity<Course>().ToTable("Course");
+            modelBuilder.Entity<Person>()
+                .HasOne(p => p.Course)
+                .WithMany(c => c.Person)
+                .HasForeignKey(p => p.CourseID);
         }
-        */
+
     }
 }

@@ -5,6 +5,6 @@
         public int ID { get; set; }
         public required string CourseName { get; set; }
 
-        public ICollection<Person> Persons { get; set; } = new List<Person>();
+        public ICollection<Person> Person { get; set; } = new List<Person>();
     }
 }
