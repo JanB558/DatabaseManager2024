@@ -23,6 +23,6 @@ app.UseHttpsRedirection();
 
 //
 // GET all people
-app.MapGet("/person", async (CourseDBContext db) => await db.People.ToListAsync());
+app.MapGet("/person", async (CourseDBContext db) => await db.Person.ToListAsync());
 
 app.Run();
