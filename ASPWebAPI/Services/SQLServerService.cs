@@ -1,5 +1,6 @@
 ﻿using ASPWebAPI.Context;
 using ASPWebAPI.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASPWebAPI.Services
 {
@@ -10,6 +11,11 @@ namespace ASPWebAPI.Services
         public SQLServerService(CourseDBContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<Person>> GetPeopleAsync()
+        {
+            return await _context.Person.ToListAsync();
         }
 
         public Task<bool> AddPersonAsync(Person person)
@@ -37,10 +43,7 @@ namespace ASPWebAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Person>> GetPeopleAsync()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<Person> GetPersonAsync(int id)
         {
