@@ -4,14 +4,15 @@ namespace ASPWebAPI.Services
 {
     public interface ISQLServerService
     {
-        public IQueryable<Person> GetPeople();
-        public Person GetPersonByID(int id);
-        public void UpdatePerson(Person person);
-        public void DeletePerson(int id);
+        public Task<IEnumerable<Person>> GetPeopleAsync();
+        public Task<Person> GetPersonAsync(int id);
+        public Task<bool> AddPersonAsync(Person person);
+        public Task<bool> UpdatePersonAsync(Person person);
+        public Task<bool> DeletePersonAsync(int id);
         //
-        public IQueryable<Course> GetCourses();
-        public Course GetCourseByID(int id);
-        public void UpdateCourse(Course course);
-        public void DeleteCourse(int id);
+        public Task<IEnumerable<Course>> GetCoursesAsync();
+        public Task<Course> GetCourseAsync(int id);
+        public Task<bool> UpdateCourseAsync(Course course);
+        public Task<bool> DeleteCourseAsync(int id);
     }
 }
