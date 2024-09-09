@@ -15,7 +15,7 @@ namespace ASPWebAPI.Services
 
         public async Task<IEnumerable<Person>> GetPeopleAsync()
         {
-            return await _context.Person.ToListAsync();
+            return await _context.Person.Include(x => x.Course).ToListAsync();
         }
 
         public Task<bool> AddPersonAsync(Person person)

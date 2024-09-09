@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ASPWebAPI.Context;
+using ASPWebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CourseDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ISQLServerService, SQLServerService>();
 
 var app = builder.Build();
 
@@ -23,6 +26,7 @@ app.UseHttpsRedirection();
 
 //
 // GET all people
-app.MapGet("/person", async (CourseDBContext db) => await db.Person.ToListAsync());
+app.MapGet("/person", async (ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetPeopleAsync()));
 
 app.Run();
