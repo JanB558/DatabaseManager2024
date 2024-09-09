@@ -25,11 +25,11 @@ namespace ASPWebAPI.Services
                 .Where(p => p.ID == id)
                 .FirstOrDefaultAsync();
         }
-        public async Task<bool> AddPersonAsync(Person person)
+        public async Task<Person> AddPersonAsync(Person person)
         {
             await _context.Person.AddAsync(person);
             await _context.SaveChangesAsync();
-            return true;
+            return person;
         }
         public async Task<bool> UpdatePersonAsync(Person person)
         {
@@ -67,11 +67,11 @@ namespace ASPWebAPI.Services
                 .Where(c => c.ID == id)
                 .FirstOrDefaultAsync();
         }
-        public async Task<bool> AddCourseAsync(Course course)
+        public async Task<Course> AddCourseAsync(Course course)
         {
             await _context.Course.AddAsync(course);
             await _context.SaveChangesAsync();
-            return true;
+            return course;
         }
         public async Task<bool> UpdateCourseAsync(Course course)
         {
