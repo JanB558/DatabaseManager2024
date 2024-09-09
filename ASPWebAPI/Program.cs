@@ -38,7 +38,7 @@ app.MapGet("/person/{id}", async (int id, ISQLServerService sqlService) =>
 app.MapPost("/person", async (Person person, ISQLServerService sqlService) =>
 {
     var createdPerson = await sqlService.AddPersonAsync(person);
-    return Results.Created($"/persons/{createdPerson.ID}", createdPerson);
+    return Results.Created($"/person/{createdPerson.ID}", createdPerson);
 });
 // UPDATE person
 app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
@@ -47,8 +47,28 @@ app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
 // DELETE person
 app.MapDelete("/person/{id}", async (int id, ISQLServerService sqlService) =>
     await sqlService.DeletePersonAsync(id)
-        ? Results.Ok() : Results.NotFound());
+    ? Results.Ok() : Results.NotFound());
 
 // courses
-
+//GET all courses
+app.MapGet("/course", async (ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetCoursesAsync()));
+//GET course by id
+app.MapGet("/course/{id}", async (int id, ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetCourseAsync(id) is Course course
+    ? Results.Ok(course) : Results.NotFound()));
+//ADD course
+app.MapPost("/course", async (Course course, ISQLServerService sqlService) =>
+{
+    var createdCourse = await sqlService.AddCourseAsync(course);
+    return Results.Created($"/course/{createdCourse.ID}", createdCourse);
+});
+//UPDATE course
+app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
+    await sqlService.UpdateCourseAsync(course)
+    ? Results.Ok(course) : Results.NotFound());
+//DELETE course
+app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
+    await sqlService.DeleteCourseAsync(id)
+    ? Results.Ok() : Results.NotFound());
 app.Run();
