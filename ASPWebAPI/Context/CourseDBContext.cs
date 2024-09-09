@@ -17,7 +17,7 @@ namespace ASPWebAPI.Context
         {
             modelBuilder.Entity<Person>()
                 .HasOne(p => p.Course)
-                .WithMany(c => c.Person)
+                .WithMany()
                 .HasForeignKey(p => p.CourseID);
         }
 
