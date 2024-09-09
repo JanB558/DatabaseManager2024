@@ -1,6 +1,7 @@
 ﻿using ASPWebAPI.Context;
 using ASPWebAPI.Model;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ASPWebAPI.Services
 {
@@ -56,21 +57,44 @@ namespace ASPWebAPI.Services
             return true;
         }
         //course
-        public Task<bool> DeleteCourseAsync(int id)
+        public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Course.ToListAsync();
         }
-        public Task<Course> GetCourseAsync(int id)
+        public async Task<Course> GetCourseAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Course
+                .Where(c => c.ID == id)
+                .FirstOrDefaultAsync();
         }
-        public Task<IEnumerable<Course>> GetCoursesAsync()
+        public async Task<bool> AddCourseAsync(Course course)
         {
-            throw new NotImplementedException();
-        }     
-        public Task<bool> UpdateCourseAsync(Course course)
+            await _context.Course.AddAsync(course);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> UpdateCourseAsync(Course course)
         {
-            throw new NotImplementedException();
-        }  
+            var courseToUpdate = await _context.Course.FindAsync(course.ID);
+
+            if (courseToUpdate is null) return false;
+
+            courseToUpdate.CourseName = course.CourseName;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<bool> DeleteCourseAsync(int id)
+        {
+            var course = await _context.Course.FindAsync(id);
+
+            if (course is null) return false;
+
+            _context.Course.Remove(course);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }                       
     }
 }
