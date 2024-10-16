@@ -1,5 +1,8 @@
 ﻿namespace ASPWebAPI.Model
 {
+    /// <summary>
+    /// each person has one course
+    /// </summary>
     public class Person
     {
         public int ID { get; set; }
