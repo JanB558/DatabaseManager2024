@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CourseDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// CONNECTION STRING SHOULD NOT BE ON GITHUB ITS JUST AN EXAMPLE
+// WARNING - CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB ITS JUST AN EXAMPLE
 
 builder.Services.AddScoped<ISQLServerService, SQLServerService>();
 
