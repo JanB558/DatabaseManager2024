@@ -4,9 +4,10 @@ namespace ASPWebApp.Controllers
 {
     public class CourseController : Controller
     {
+        [Route("Course/Course")]
         public IActionResult Index()
         {
-            return View();
+            return View("../DBM/Course");
         }
     }
 }
