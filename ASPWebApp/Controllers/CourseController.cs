@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ASPWebApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace ASPWebApp.Controllers
 {
@@ -23,9 +26,19 @@ namespace ASPWebApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return View();
+                var courses = JsonConvert.DeserializeObject<List<Course>>(content);
+                if (courses is null) return StatusCode(200, "List is null.");
+                CoursePageModel cpm = new();
+                cpm.CourseList = courses.ToList();
+                return View(cpm);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
