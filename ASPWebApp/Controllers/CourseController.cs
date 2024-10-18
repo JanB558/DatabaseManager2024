@@ -17,12 +17,12 @@ namespace ASPWebApp.Controllers
             _apiUrl = _configuration.GetConnectionString("ApiConnectionString"); 
             //WARNING - CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB - IT'S JUST AN EXAMPLE
             if (_apiUrl == null) throw new NullReferenceException("Missing connection string.");
+            _httpClient.BaseAddress = new Uri(_apiUrl);
         }
 
         public async Task<IActionResult> Index()
         {
-            var endpoint = $"{_apiUrl}/course";
-            HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+            HttpResponseMessage response = await _httpClient.GetAsync("/course");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -33,6 +33,23 @@ namespace ASPWebApp.Controllers
                 return View(cpm);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
+        public async Task<IActionResult> Create(Course model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _httpClient.PostAsJsonAsync("/course", model);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error while creating entity.");
+                }
+            }
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
