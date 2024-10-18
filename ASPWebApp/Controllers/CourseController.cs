@@ -14,7 +14,6 @@ namespace ASPWebApp.Controllers
             _apiUrl = _configuration.GetConnectionString("ApiConnectionString");
         }
 
-        [Route("Course/Course")]
         public async Task<IActionResult> Index()
         {
             var endpoint = $"{_apiUrl}/course";
