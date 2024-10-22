@@ -52,6 +52,19 @@ namespace ASPWebApp.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Update(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"/course/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var course = JsonConvert.DeserializeObject<Course>(content);
+                if (course is null) return StatusCode(200, "Course is null.");
+                return View(course);
+            }
+            return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
         public async Task<IActionResult> Update(Course model)
         {
             if (ModelState.IsValid)
