@@ -72,7 +72,7 @@ namespace ASPWebApp.Controllers
             if (ModelState.IsValid)
             {
                 Debug.WriteLine($"{model.ID} {model.CourseName}");
-                var response = await _httpClient.PostAsJsonAsync("/course", model);
+                var response = await _httpClient.PutAsJsonAsync("/course", model);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
