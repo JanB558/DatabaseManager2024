@@ -52,6 +52,7 @@ namespace ASPWebApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"/course/{id}");
@@ -65,10 +66,12 @@ namespace ASPWebApp.Controllers
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
 
+        [HttpPost]
         public async Task<IActionResult> Update(Course model)
         {
             if (ModelState.IsValid)
             {
+                Debug.WriteLine($"{model.ID} {model.CourseName}");
                 var response = await _httpClient.PostAsJsonAsync("/course", model);
                 if (response.IsSuccessStatusCode)
                 {
