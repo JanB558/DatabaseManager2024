@@ -13,15 +13,15 @@ namespace ASPWebAPI.Services
         {
             _context = context;
         }
-        //people
+
+        #region people
         public async Task<IEnumerable<Person>> GetPeopleAsync()
         {
-            return await _context.Person.Include(x => x.Course).ToListAsync();
+            return await _context.Person.ToListAsync();
         }
         public async Task<Person> GetPersonAsync(int id)
         {
             return await _context.Person
-                .Include(x => x.Course)
                 .Where(p => p.ID == id)
                 .FirstOrDefaultAsync();
         }
@@ -39,7 +39,6 @@ namespace ASPWebAPI.Services
 
             personToUpdate.FirstName = person.FirstName;
             personToUpdate.LastName = person.LastName;
-            personToUpdate.CourseID = person.CourseID;
 
             await _context.SaveChangesAsync();
 
@@ -56,7 +55,9 @@ namespace ASPWebAPI.Services
 
             return true;
         }
-        //course
+        #endregion
+
+        #region course
         public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
             return await _context.Course.ToListAsync();
@@ -95,6 +96,7 @@ namespace ASPWebAPI.Services
             await _context.SaveChangesAsync();
 
             return true;
-        }                       
+        }
+        #endregion
     }
 }
