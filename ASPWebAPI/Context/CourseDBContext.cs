@@ -8,6 +8,7 @@ namespace ASPWebAPI.Context
     {
         public DbSet<Person> Person { get; set; }
         public DbSet<Course> Course { get; set; }
+        public DbSet<Enrollment> Enrollment { get; set; }
 
         public CourseDBContext(DbContextOptions<CourseDBContext> options) : base(options)
         {

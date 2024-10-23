@@ -98,5 +98,12 @@ namespace ASPWebAPI.Services
             return true;
         }
         #endregion
+
+        #region enrollment
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsAsync()
+        {
+            return await _context.Enrollment.ToListAsync();
+        }
+        #endregion
     }
 }
