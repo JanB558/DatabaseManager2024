@@ -15,10 +15,7 @@ namespace ASPWebAPI.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Person>()
-                .HasOne(p => p.Course)
-                .WithMany()
-                .HasForeignKey(p => p.CourseID);
+            
         }
 
     }
