@@ -22,9 +22,7 @@ GO
 CREATE TABLE Person (
     ID INT PRIMARY KEY IDENTITY(1,1), 
     FirstName NVARCHAR(50) NOT NULL,   
-    LastName NVARCHAR(50) NOT NULL,  
-	CourseID INT, 
-	FOREIGN KEY (CourseID) REFERENCES Course(ID)
+    LastName NVARCHAR(50) NOT NULL
 );
 GO
 
@@ -34,9 +32,29 @@ INSERT INTO Course (CourseName) VALUES ('Science')
 
 SELECT * FROM Course
 
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('John', 'Doe', 2)
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Jane', 'Doe', 3)
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Peter', 'Jackson', 1)
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Matt', 'Damon', 2)
+INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('John', 'Doe')
+INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Jane', 'Doe')
+INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Peter', 'Jackson')
+INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Matt', 'Damon')
 
-SELECT p.ID, p.FirstName, p.LastName, c.CourseName FROM Person p INNER JOIN Course c ON c.ID = p.CourseID
+SELECT p.ID, p.FirstName, p.LastName, c.CourseName FROM Person p
+
+CREATE TABLE Enrollment (
+    EnrollmentID INT PRIMARY KEY IDENTITY(1,1),
+    PersonID INT,
+    CourseID INT,
+    EnrollmentDate DATE,
+    UNIQUE (PersonID, CourseID),
+    FOREIGN KEY (PersonID) REFERENCES Person(ID),
+    FOREIGN KEY (CourseID) REFERENCES Course(ID)
+);
+
+INSERT INTO Enrollment (PersonID, CourseID, EnrollmentDate)
+VALUES 
+(1, 1, CAST(GETDATE() AS DATE)),
+(2, 2, CAST(GETDATE() AS DATE)),
+(3, 1, CAST(GETDATE() AS DATE))
+
+SELECT e.EnrollmentID, p.FirstName, p.LastName, c.CourseName FROM Enrollment e
+INNER JOIN Person p ON e.PersonID = p.ID
+INNER JOIN Course c ON e.CourseID = c.ID;
