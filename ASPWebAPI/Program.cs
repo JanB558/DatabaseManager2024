@@ -81,8 +81,11 @@ app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetEnrollmentsFullAsync()));
 //GET all enrollments for person
 app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetEnrollmentsPersonAsync(id) is Enrollment enrollment 
-    ? Results.Ok(enrollment) : Results.NotFound()));
+{
+    var enrollments = await sqlService.GetEnrollmentsPersonAsync(id);
+    return enrollments.Any() ? Results.Ok(enrollments) : Results.NotFound();
+});
+
 //ADD enrollment
 app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
 {
