@@ -15,5 +15,12 @@ namespace ASPWebAPI.Services
         public Task<Course> AddCourseAsync(Course course);
         public Task<bool> UpdateCourseAsync(Course course);
         public Task<bool> DeleteCourseAsync(int id);
+        //
+        Task<IEnumerable<Enrollment>> GetEnrollmentsAsync();
+        Task<IEnumerable<Enrollment>> GetEnrollmentsFullAsync(int personId);
+        Task<bool> UpdateEnrollmentAsync(Enrollment enrollment);
+        Task<IEnumerable<Enrollment>> GetEnrollmentsPersonAsync(int personID);
+        Task<Enrollment> AddEnrollmentAsync(Enrollment enrollment);
+        Task<bool> DeleteEnrollmentAsync(int enrollmentID);
     }
 }

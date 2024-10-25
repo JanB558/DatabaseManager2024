@@ -104,6 +104,51 @@ namespace ASPWebAPI.Services
         {
             return await _context.Enrollment.ToListAsync();
         }
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsFullAsync(int personId)
+        {
+            return await _context.Enrollment
+                .Include(x => x.Person)
+                .Include(x => x.Course)
+                .ToListAsync();
+        }
+        public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
+        {
+            var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.EnrollmentID);
+
+            if (enrollmentToUpdate is null) return false;
+
+            enrollmentToUpdate.PersonID = enrollment.PersonID;
+            enrollmentToUpdate.CourseID = enrollment.CourseID;
+            enrollmentToUpdate.EnrollmentDate = enrollment.EnrollmentDate;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsPersonAsync(int personID)
+        {
+            return await _context.Enrollment
+                .Include(x => x.Person)
+                .Where(x => x.PersonID.Equals(personID))
+                .ToListAsync();
+        }
+        public async Task<Enrollment> AddEnrollmentAsync(Enrollment enrollment)
+        {
+            await _context.Enrollment.AddAsync(enrollment);
+            await _context.SaveChangesAsync();
+            return enrollment;
+        }
+        public async Task<bool> DeleteEnrollmentAsync(int enrollmentID)
+        {
+            var enrollment = await _context.Enrollment.FindAsync(enrollmentID);
+
+            if (enrollment is null) return false;
+
+            _context.Enrollment.Remove(enrollment);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
         #endregion
     }
 }
