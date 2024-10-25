@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// people
+#region person
 // GET all people
 app.MapGet("/person", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetPeopleAsync()));
@@ -48,8 +48,8 @@ app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
 app.MapDelete("/person/{id}", async (int id, ISQLServerService sqlService) =>
     await sqlService.DeletePersonAsync(id)
     ? Results.Ok() : Results.NotFound());
-
-// courses
+#endregion
+#region course
 //GET all courses
 app.MapGet("/course", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetCoursesAsync()));
@@ -71,4 +71,7 @@ app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
 app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
     await sqlService.DeleteCourseAsync(id)
     ? Results.Ok() : Results.NotFound());
+#endregion
+#region enrollment
+#endregion
 app.Run();
