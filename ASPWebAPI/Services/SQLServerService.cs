@@ -104,7 +104,7 @@ namespace ASPWebAPI.Services
         {
             return await _context.Enrollment.ToListAsync();
         }
-        public async Task<IEnumerable<Enrollment>> GetEnrollmentsFullAsync(int personId)
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsFullAsync()
         {
             return await _context.Enrollment
                 .Include(x => x.Person)

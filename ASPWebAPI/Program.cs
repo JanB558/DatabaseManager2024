@@ -73,5 +73,29 @@ app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
     ? Results.Ok() : Results.NotFound());
 #endregion
 #region enrollment
+//GET all enrolments
+app.MapGet("/enrollment", async (ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetEnrollmentsAsync()));
+//GET all full enrolments
+app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetEnrollmentsFullAsync()));
+//GET all enrollments for person
+app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetEnrollmentsPersonAsync(id) is Enrollment enrollment 
+    ? Results.Ok(enrollment) : Results.NotFound()));
+//ADD enrollment
+app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
+{
+    var createdEnrollment = await sqlService.AddEnrollmentAsync(enrollment);
+    return Results.Created($"/course/{createdEnrollment.EnrollmentID}", createdEnrollment);
+});
+//UPDATE enrollment
+app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
+    await sqlService.UpdateEnrollmentAsync(enrollment)
+    ? Results.Ok(enrollment) : Results.NotFound());
+//DELETE enrollment
+app.MapDelete("/enrollment/{id}", async (int id, ISQLServerService sqlService) =>
+    await sqlService.DeleteEnrollmentAsync(id)
+    ? Results.Ok() : Results.NotFound());
 #endregion
 app.Run();
