@@ -1,4 +1,6 @@
-﻿namespace ASPWebAPI.Model
+﻿using System.Text.Json.Serialization;
+
+namespace ASPWebAPI.Model
 {
     public class Enrollment
     {
@@ -9,7 +11,9 @@
         public DateTime? CompletionDate { get; set; }
 
         //navigation properties
+        [JsonIgnore]
         public Course? Course { get; set; }
+        [JsonIgnore]
         public Person? Person { get; set; }
     }
 }
