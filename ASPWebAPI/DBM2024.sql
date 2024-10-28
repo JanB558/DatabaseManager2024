@@ -44,10 +44,12 @@ CREATE TABLE Enrollment (
     PersonID INT,
     CourseID INT,
     EnrollmentDate DATE,
+    CompletionDate DATE NULL,
     UNIQUE (PersonID, CourseID),
     FOREIGN KEY (PersonID) REFERENCES Person(ID),
     FOREIGN KEY (CourseID) REFERENCES Course(ID)
 );
+--constraints could be named
 
 INSERT INTO Enrollment (PersonID, CourseID, EnrollmentDate)
 VALUES 
