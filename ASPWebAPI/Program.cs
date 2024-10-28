@@ -101,4 +101,9 @@ app.MapDelete("/enrollment/{id}", async (int id, ISQLServerService sqlService) =
     await sqlService.DeleteEnrollmentAsync(id)
     ? Results.Ok() : Results.NotFound());
 #endregion
+#region mix
+//GET course with person count
+app.MapGet("/courseenrollmentcount", async (ISQLServerService sqlService) =>
+    Results.Ok(await sqlService.GetCoursesWithPersonCountAsync()));
+#endregion
 app.Run();
