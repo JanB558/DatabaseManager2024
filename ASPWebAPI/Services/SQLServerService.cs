@@ -27,12 +27,14 @@ namespace ASPWebAPI.Services
         }
         public async Task<Person> AddPersonAsync(Person person)
         {
+            ArgumentNullException.ThrowIfNull(person);
             await _context.Person.AddAsync(person);
             await _context.SaveChangesAsync();
             return person;
         }
         public async Task<bool> UpdatePersonAsync(Person person)
         {
+            ArgumentNullException.ThrowIfNull(person);
             var personToUpdate = await _context.Person.FindAsync(person.ID);
 
             if (personToUpdate is null) return false;
@@ -70,12 +72,14 @@ namespace ASPWebAPI.Services
         }
         public async Task<Course> AddCourseAsync(Course course)
         {
+            ArgumentNullException.ThrowIfNull(course);
             await _context.Course.AddAsync(course);
             await _context.SaveChangesAsync();
             return course;
         }
         public async Task<bool> UpdateCourseAsync(Course course)
         {
+            ArgumentNullException.ThrowIfNull(course);
             var courseToUpdate = await _context.Course.FindAsync(course.ID);
 
             if (courseToUpdate is null) return false;
@@ -113,6 +117,7 @@ namespace ASPWebAPI.Services
         }
         public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
         {
+            ArgumentNullException.ThrowIfNull(enrollment);
             var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.EnrollmentID);
 
             if (enrollmentToUpdate is null) return false;
@@ -134,6 +139,7 @@ namespace ASPWebAPI.Services
         }
         public async Task<Enrollment> AddEnrollmentAsync(Enrollment enrollment)
         {
+            ArgumentNullException.ThrowIfNull(enrollment);
             await _context.Enrollment.AddAsync(enrollment);
             await _context.SaveChangesAsync();
             return enrollment;
