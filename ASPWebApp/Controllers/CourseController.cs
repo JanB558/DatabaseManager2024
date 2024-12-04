@@ -23,11 +23,11 @@ namespace ASPWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("/course");
+            HttpResponseMessage response = await _httpClient.GetAsync("/courseenrollmentcount");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var courses = JsonConvert.DeserializeObject<List<Course>>(content);
+                var courses = JsonConvert.DeserializeObject<List<CoursePersonCount>>(content);
                 if (courses is null) return StatusCode(404, "List is null.");
                 CoursePageModel cpm = new();
                 cpm.CourseList = courses.ToList();

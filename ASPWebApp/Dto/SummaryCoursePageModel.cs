@@ -1,4 +1,6 @@
-﻿namespace ASPWebApp.Dto
+﻿using ASPWebApp.Models;
+
+namespace ASPWebApp.Dto
 {
     public class SummaryCoursePageModel
     {

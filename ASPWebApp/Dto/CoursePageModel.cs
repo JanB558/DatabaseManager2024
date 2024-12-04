@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using ASPWebApp.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ASPWebApp.Dto
 {
