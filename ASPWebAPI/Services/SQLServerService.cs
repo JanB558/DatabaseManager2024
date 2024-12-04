@@ -19,7 +19,7 @@ namespace ASPWebAPI.Services
         {
             return await _context.Person.ToListAsync();
         }
-        public async Task<Person> GetPersonAsync(int id)
+        public async Task<Person?> GetPersonAsync(int id)
         {
             return await _context.Person
                 .Where(p => p.ID == id)
@@ -62,7 +62,7 @@ namespace ASPWebAPI.Services
         {
             return await _context.Course.ToListAsync();
         }
-        public async Task<Course> GetCourseAsync(int id)
+        public async Task<Course?> GetCourseAsync(int id)
         {
             return await _context.Course
                 .Where(c => c.ID == id)
