@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ASPWebApp.Models
+namespace ASPWebApp.Dto
 {
     public class CoursePageModel : PageModel
     {
-        public List<Course>? CourseList { get; set; }
+        public List<CoursePersonCount>? CourseList { get; set; }
     }
 }

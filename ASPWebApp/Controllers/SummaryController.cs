@@ -1,9 +1,13 @@
-﻿using ASPWebApp.Models;
+﻿using ASPWebApp.Dto;
+using ASPWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ASPWebApp.Controllers
 {
+    /// <summary>
+    /// Obsolete TODO remove later
+    /// </summary>
     public class SummaryController : Controller
     {
         private readonly HttpClient _httpClient;

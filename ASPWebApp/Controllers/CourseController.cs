@@ -1,4 +1,5 @@
-﻿using ASPWebApp.Models;
+﻿using ASPWebApp.Dto;
+using ASPWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -27,7 +28,7 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<Course>>(content);
-                if (courses is null) return StatusCode(200, "List is null.");
+                if (courses is null) return StatusCode(404, "List is null.");
                 CoursePageModel cpm = new();
                 cpm.CourseList = courses.ToList();
                 return View(cpm);
