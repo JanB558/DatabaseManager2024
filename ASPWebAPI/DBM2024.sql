@@ -40,16 +40,15 @@ INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Matt', 'Damon')
 SELECT p.ID, p.FirstName, p.LastName, c.CourseName FROM Person p
 
 CREATE TABLE Enrollment (
-    EnrollmentID INT PRIMARY KEY IDENTITY(1,1),
+    ID INT PRIMARY KEY IDENTITY(1,1),
     PersonID INT,
     CourseID INT,
     EnrollmentDate DATE,
     CompletionDate DATE NULL,
-    UNIQUE (PersonID, CourseID),
-    FOREIGN KEY (PersonID) REFERENCES Person(ID),
-    FOREIGN KEY (CourseID) REFERENCES Course(ID)
+    CONSTRAINT UQ_Enrollment_PersonID_CourseID UNIQUE (PersonID, CourseID),
+    CONSTRAINT FK_Enrollment_PersonID FOREIGN KEY (PersonID) REFERENCES Person(ID),
+    CONSTRAINT FK_Enrollment_CourseID FOREIGN KEY (CourseID) REFERENCES Course(ID)
 );
---constraints could be named
 
 INSERT INTO Enrollment (PersonID, CourseID, EnrollmentDate)
 VALUES 
@@ -57,6 +56,6 @@ VALUES
 (2, 2, CAST(GETDATE() AS DATE)),
 (3, 1, CAST(GETDATE() AS DATE))
 
-SELECT e.EnrollmentID, p.FirstName, p.LastName, c.CourseName FROM Enrollment e
+SELECT e.ID, p.FirstName, p.LastName, c.CourseName FROM Enrollment e
 INNER JOIN Person p ON e.PersonID = p.ID
 INNER JOIN Course c ON e.CourseID = c.ID;

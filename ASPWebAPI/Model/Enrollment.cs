@@ -4,7 +4,7 @@ namespace ASPWebAPI.Model
 {
     public class Enrollment
     {
-        public int EnrollmentID { get; set; }
+        public int ID { get; set; }
         public int PersonID {  get; set; }
         public int CourseID { get; set; }
         public DateTime EnrollmentDate { get; set; }
@@ -15,5 +15,14 @@ namespace ASPWebAPI.Model
         public Course? Course { get; set; }
         [JsonIgnore]
         public Person? Person { get; set; }
+
+        public void Copy(Enrollment enrollment)
+        {
+            this.ID = enrollment.ID;
+            this.PersonID = enrollment.PersonID;
+            this.CourseID = enrollment.CourseID;
+            this.EnrollmentDate = enrollment.EnrollmentDate;
+            this.CompletionDate = enrollment.CompletionDate;
+        }
     }
 }

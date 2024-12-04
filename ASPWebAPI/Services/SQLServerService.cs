@@ -118,7 +118,7 @@ namespace ASPWebAPI.Services
         public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
         {
             ArgumentNullException.ThrowIfNull(enrollment);
-            var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.EnrollmentID);
+            var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.ID);
 
             if (enrollmentToUpdate is null) return false;
 
