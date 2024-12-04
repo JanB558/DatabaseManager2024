@@ -34,12 +34,12 @@ INSERT INTO Course (CourseName) VALUES ('Science')
 
 SELECT * FROM Course
 
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('John', 'Doe')
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Jane', 'Doe')
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Peter', 'Jackson')
-INSERT INTO Person (FirstName, LastName, CourseID) VALUES ('Matt', 'Damon')
+INSERT INTO Person (FirstName, LastName) VALUES ('John', 'Doe')
+INSERT INTO Person (FirstName, LastName) VALUES ('Jane', 'Doe')
+INSERT INTO Person (FirstName, LastName) VALUES ('Peter', 'Jackson')
+INSERT INTO Person (FirstName, LastName) VALUES ('Matt', 'Damon')
 
-SELECT p.ID, p.FirstName, p.LastName, c.CourseName FROM Person p
+SELECT p.ID, p.FirstName, p.LastName FROM Person p
 
 CREATE TABLE Enrollment (
     ID INT PRIMARY KEY IDENTITY(1,1),
