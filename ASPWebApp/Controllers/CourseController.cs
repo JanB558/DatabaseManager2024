@@ -60,9 +60,9 @@ namespace ASPWebApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var jsonOutput = JsonConvert.DeserializeObject<ApiResponse<Course>>(content);
-                if (jsonOutput?.Value is null) return StatusCode(200, "Course is null.");
-                return View(jsonOutput.Value);
+                var course = JsonConvert.DeserializeObject<Course>(content);
+                if (course is null) return StatusCode(404, "Course is null.");
+                return View(course);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
