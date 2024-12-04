@@ -15,14 +15,16 @@ GO
 
 CREATE TABLE Course (
 	ID INT PRIMARY KEY IDENTITY(1,1),
-	CourseName NVARCHAR(50)
+	CourseName NVARCHAR(50),
+    VersionStamp rowversion
 );
 GO
 
 CREATE TABLE Person (
     ID INT PRIMARY KEY IDENTITY(1,1), 
     FirstName NVARCHAR(50) NOT NULL,   
-    LastName NVARCHAR(50) NOT NULL
+    LastName NVARCHAR(50) NOT NULL,
+    VersionStamp rowversion
 );
 GO
 
@@ -45,6 +47,7 @@ CREATE TABLE Enrollment (
     CourseID INT,
     EnrollmentDate DATE,
     CompletionDate DATE NULL,
+    VersionStamp rowversion,
     CONSTRAINT UQ_Enrollment_PersonID_CourseID UNIQUE (PersonID, CourseID),
     CONSTRAINT FK_Enrollment_PersonID FOREIGN KEY (PersonID) REFERENCES Person(ID),
     CONSTRAINT FK_Enrollment_CourseID FOREIGN KEY (CourseID) REFERENCES Course(ID)
