@@ -32,8 +32,10 @@ app.MapGet("/person", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetPeopleAsync()));
 // GET person by id
 app.MapGet("/person/{id}", async (int id, ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetPersonAsync(id) is Person person
-    ? Results.Ok(person) : Results.NotFound()));
+{
+    var person = await sqlService.GetPersonAsync(id);
+    return person is not null ? Results.Ok(person) : Results.NotFound();
+});
 // ADD person
 app.MapPost("/person", async (Person person, ISQLServerService sqlService) =>
 {
@@ -55,8 +57,10 @@ app.MapGet("/course", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetCoursesAsync()));
 //GET course by id
 app.MapGet("/course/{id}", async (int id, ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetCourseAsync(id) is Course course
-    ? Results.Ok(course) : Results.NotFound()));
+{
+    var course = await sqlService.GetCourseAsync(id);
+    return course is not null ? Results.Ok(course) : Results.NotFound();
+});
 //ADD course
 app.MapPost("/course", async (Course course, ISQLServerService sqlService) =>
 {
