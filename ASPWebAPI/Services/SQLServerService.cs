@@ -39,8 +39,7 @@ namespace ASPWebAPI.Services
 
             if (personToUpdate is null) return false;
 
-            personToUpdate.FirstName = person.FirstName;
-            personToUpdate.LastName = person.LastName;
+            personToUpdate.Copy(person);
 
             await _context.SaveChangesAsync();
 
@@ -84,7 +83,7 @@ namespace ASPWebAPI.Services
 
             if (courseToUpdate is null) return false;
 
-            courseToUpdate.CourseName = course.CourseName;
+            courseToUpdate.Copy(course);
 
             await _context.SaveChangesAsync();
 
@@ -122,9 +121,7 @@ namespace ASPWebAPI.Services
 
             if (enrollmentToUpdate is null) return false;
 
-            enrollmentToUpdate.PersonID = enrollment.PersonID;
-            enrollmentToUpdate.CourseID = enrollment.CourseID;
-            enrollmentToUpdate.EnrollmentDate = enrollment.EnrollmentDate;
+            enrollmentToUpdate.Copy(enrollment);
 
             await _context.SaveChangesAsync();
 
