@@ -107,7 +107,7 @@ namespace ASPWebAPI.Services
         {
             return await _context.Enrollment.ToListAsync();
         }
-        public async Task<IEnumerable<Enrollment>> GetEnrollmentsFullAsync()
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsWithDetailsAsync()
         {
             return await _context.Enrollment
                 .Include(x => x.Person)
@@ -155,14 +155,6 @@ namespace ASPWebAPI.Services
         #region mix
         public async Task<IEnumerable<CoursePersonCount>> GetCoursesWithPersonCountAsync()
         {
-            //return await _context.Course
-            //    .Select(course => new CoursePersonCount
-            //    {
-            //        ID = course.ID,
-            //        CourseName = course.CourseName,
-            //        EnrollmentCount = _context.Enrollment.Count(x => x.CourseID == course.ID)
-            //    })
-            //    .ToListAsync();
             return await _context.Course
                 .GroupJoin(
                     _context.Enrollment,

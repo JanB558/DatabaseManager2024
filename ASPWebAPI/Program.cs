@@ -78,7 +78,7 @@ app.MapGet("/enrollment", async (ISQLServerService sqlService) =>
     Results.Ok(await sqlService.GetEnrollmentsAsync()));
 //GET all full enrolments
 app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetEnrollmentsFullAsync()));
+    Results.Ok(await sqlService.GetEnrollmentsWithDetailsAsync()));
 //GET all enrollments for person
 app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService) =>
 {
@@ -90,7 +90,7 @@ app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService
 app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
 {
     var createdEnrollment = await sqlService.AddEnrollmentAsync(enrollment);
-    return Results.Created($"/course/{createdEnrollment.EnrollmentID}", createdEnrollment);
+    return Results.Created($"/course/{createdEnrollment.ID}", createdEnrollment);
 });
 //UPDATE enrollment
 app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
