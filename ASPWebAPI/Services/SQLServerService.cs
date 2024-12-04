@@ -117,15 +117,13 @@ namespace ASPWebAPI.Services
         public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
         {
             ArgumentNullException.ThrowIfNull(enrollment);
-            var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.ID);
-
-            if (enrollmentToUpdate is null) return false;
-
-            enrollmentToUpdate.Copy(enrollment);
-
-            await _context.SaveChangesAsync();
-
-            return true;
+            if (_context.Enrollment.Any(e => e.ID == enrollment.ID))
+            {
+                _context.Enrollment.Update(enrollment);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public async Task<IEnumerable<Enrollment>> GetEnrollmentsPersonAsync(int personID)
         {
