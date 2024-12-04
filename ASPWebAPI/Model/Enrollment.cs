@@ -17,8 +17,7 @@ namespace ASPWebAPI.Model
         public Person? Person { get; set; }
 
         public void Copy(Enrollment enrollment)
-        {
-            this.ID = enrollment.ID;
+        {          
             this.PersonID = enrollment.PersonID;
             this.CourseID = enrollment.CourseID;
             this.EnrollmentDate = enrollment.EnrollmentDate;

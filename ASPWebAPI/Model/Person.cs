@@ -8,7 +8,6 @@
 
         public void Copy(Person other)
         {
-            this.ID = other.ID;
             this.FirstName = other.FirstName;
             this.LastName = other.LastName;
         }
