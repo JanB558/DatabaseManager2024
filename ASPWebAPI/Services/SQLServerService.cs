@@ -38,7 +38,10 @@ namespace ASPWebAPI.Services
             ArgumentNullException.ThrowIfNull(person);
             var personToUpdate = await _context.Person.FindAsync(person.ID);
 
-            if (personToUpdate is null) return false;
+            if (personToUpdate is null) 
+                return false;
+            if (!personToUpdate.VersionStamp.SequenceEqual(person.VersionStamp)) 
+                throw new DbUpdateConcurrencyException("The data has changed. Another user edited this record.");
 
             personToUpdate.Copy(person);
 
@@ -82,7 +85,10 @@ namespace ASPWebAPI.Services
             ArgumentNullException.ThrowIfNull(course);
             var courseToUpdate = await _context.Course.FindAsync(course.ID);
 
-            if (courseToUpdate is null) return false;
+            if (courseToUpdate is null) 
+                return false;
+            if (!courseToUpdate.VersionStamp.SequenceEqual(course.VersionStamp))
+                throw new DbUpdateConcurrencyException("The data has changed. Another user edited this record.");
 
             courseToUpdate.Copy(course);
 
@@ -118,13 +124,18 @@ namespace ASPWebAPI.Services
         public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
         {
             ArgumentNullException.ThrowIfNull(enrollment);
-            if (_context.Enrollment.Any(e => e.ID == enrollment.ID))
-            {
-                _context.Enrollment.Update(enrollment);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            var enrollmentToUpdate = await _context.Enrollment.FindAsync(enrollment.ID);
+
+            if (enrollmentToUpdate is null)
+                return false;
+            if (!enrollmentToUpdate.VersionStamp.SequenceEqual(enrollment.VersionStamp))
+                throw new DbUpdateConcurrencyException("The data has changed. Another user edited this record.");
+
+            enrollmentToUpdate.Copy(enrollment);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
         public async Task<IEnumerable<Enrollment>> GetEnrollmentsPersonAsync(int personID)
         {

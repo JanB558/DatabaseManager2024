@@ -11,7 +11,7 @@ namespace ASPWebAPI.Model
         public DateTime EnrollmentDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         [Timestamp]
-        public byte[]? VersionStamp { get; set; }
+        public byte[] VersionStamp { get; set; } = [];
 
         //navigation properties
         [JsonIgnore]

@@ -12,7 +12,7 @@ namespace ASPWebAPI.Model
         [StringLength(50, MinimumLength = 2)]
         public required string LastName { get; set; }
         [Timestamp]
-        public byte[]? VersionStamp { get; set; }
+        public byte[] VersionStamp { get; set; } = []; 
 
         public void Copy(Person other)
         {
