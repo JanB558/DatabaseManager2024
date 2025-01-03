@@ -1,3 +1,2 @@
-﻿add validation to api
-add proper error handling to api
-add error window/message when api fails when using the website
+﻿API
+	test data validation and concurrency
