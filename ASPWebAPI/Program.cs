@@ -183,41 +183,109 @@ app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
 #region enrollment
 //GET all enrolments
 app.MapGet("/enrollment", async (ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetEnrollmentsAsync()));
+{
+    try
+    {
+        var result = await sqlService.GetEnrollmentsAsync();
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 
 //GET all full enrolments
 app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetEnrollmentsWithDetailsAsync()));
+{
+    try
+    {
+        var result = await sqlService.GetEnrollmentsWithDetailsAsync();
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 
 //GET all enrollments for person
 app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService) =>
 {
-    var enrollments = await sqlService.GetEnrollmentsPersonAsync(id);
-    return enrollments.Any() ? Results.Ok(enrollments) : Results.NotFound();
+    try
+    {
+        var result = await sqlService.GetEnrollmentsPersonAsync(id);
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
 });
 
 //ADD enrollment
 app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
 {
-    var createdEnrollment = await sqlService.AddEnrollmentAsync(enrollment);
-    return Results.Created($"/course/{createdEnrollment.ID}", createdEnrollment);
+    try
+    {
+        var result = await sqlService.AddEnrollmentAsync(enrollment);
+        return Results.Created();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
 });
 
 //UPDATE enrollment
 app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
-    await sqlService.UpdateEnrollmentAsync(enrollment)
-    ? Results.Ok(enrollment) : Results.NotFound());
-
+{
+    try
+    {
+        var result = await sqlService.UpdateEnrollmentAsync(enrollment);
+        if (result) return Results.Ok();
+        else return Results.BadRequest();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 //DELETE enrollment
 app.MapDelete("/enrollment/{id}", async (int id, ISQLServerService sqlService) =>
-    await sqlService.DeleteEnrollmentAsync(id)
-    ? Results.Ok() : Results.NotFound());
+{
+    try
+    {
+        var result = await sqlService.DeleteEnrollmentAsync(id);
+        if (result) return Results.Ok();
+        else return Results.NotFound();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 #endregion
 
 #region mix
 //GET course with person count
 app.MapGet("/courseenrollmentcount", async (ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetCoursesWithPersonCountAsync()));
+{
+    try
+    {
+        var result = await sqlService.GetCoursesWithPersonCountAsync();
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 
 #endregion
 app.Run();
