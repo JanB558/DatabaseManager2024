@@ -107,31 +107,77 @@ app.MapDelete("/person/{id}", async (int id, ISQLServerService sqlService) =>
 #region course
 //GET all courses
 app.MapGet("/course", async (ISQLServerService sqlService) =>
-    Results.Ok(await sqlService.GetCoursesAsync()));
+{
+    try
+    {
+        var result = await sqlService.GetCoursesAsync();
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 
 //GET course by id
 app.MapGet("/course/{id}", async (int id, ISQLServerService sqlService) =>
 {
-    var course = await sqlService.GetCourseAsync(id);
-    return course is not null ? Results.Ok(course) : Results.NotFound();
+    try
+    {
+        var result = await sqlService.GetCourseAsync(id);
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
 });
 
 //ADD course
 app.MapPost("/course", async (Course course, ISQLServerService sqlService) =>
 {
-    var createdCourse = await sqlService.AddCourseAsync(course);
-    return Results.Created($"/course/{createdCourse.ID}", createdCourse);
+    try
+    {
+        var result = await sqlService.AddCourseAsync(course);
+        return Results.Created();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
 });
 
 //UPDATE course
 app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
-    await sqlService.UpdateCourseAsync(course)
-    ? Results.Ok(course) : Results.NotFound());
+{
+    try
+    {
+        var result = await sqlService.UpdateCourseAsync(course);
+        if (result) return Results.Ok();
+        else return Results.BadRequest();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 
 //DELETE course
 app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
-    await sqlService.DeleteCourseAsync(id)
-    ? Results.Ok() : Results.NotFound());
+{
+    try
+    {
+        var result = await sqlService.DeleteCourseAsync(id);
+        if (result) return Results.Ok();
+        else return Results.NotFound();
+    }catch(Exception ex)
+    {
+        Debug.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 #endregion
 
 #region enrollment
