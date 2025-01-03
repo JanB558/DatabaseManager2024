@@ -5,6 +5,7 @@ using System;
 
 namespace ASPWebAPI.Services
 {
+    // MS SQL Server implementation
     public class SQLServerService : ISQLServerService
     {
         private readonly CourseDBContext _context;
