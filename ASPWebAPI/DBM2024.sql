@@ -15,7 +15,7 @@ GO
 
 CREATE TABLE Course (
 	ID INT PRIMARY KEY IDENTITY(1,1),
-	CourseName NVARCHAR(50),
+	CourseName NVARCHAR(50) NOT NULL,
     VersionStamp rowversion
 );
 GO
@@ -43,9 +43,9 @@ SELECT p.ID, p.FirstName, p.LastName FROM Person p
 
 CREATE TABLE Enrollment (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    PersonID INT,
-    CourseID INT,
-    EnrollmentDate DATE,
+    PersonID INT NOT NULL,
+    CourseID INT NOT NULL,
+    EnrollmentDate DATE NOT NULL,
     CompletionDate DATE NULL,
     VersionStamp rowversion,
     CONSTRAINT UQ_Enrollment_PersonID_CourseID UNIQUE (PersonID, CourseID),
