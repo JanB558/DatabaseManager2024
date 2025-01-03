@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ASPWebAPI.Model
 {
@@ -9,6 +10,8 @@ namespace ASPWebAPI.Model
         public int CourseID { get; set; }
         public DateTime EnrollmentDate { get; set; }
         public DateTime? CompletionDate { get; set; }
+        [Timestamp]
+        public byte[]? VersionStamp { get; set; }
 
         //navigation properties
         [JsonIgnore]

@@ -8,6 +8,8 @@ namespace ASPWebAPI.Model
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public required string CourseName { get; set; }
+        [Timestamp]
+        public byte[]? VersionStamp { get; set; }
 
         public void Copy(Course other)
         {
