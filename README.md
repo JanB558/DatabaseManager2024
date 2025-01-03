@@ -1,4 +1,6 @@
-# ASPWebAPI
+# Example Database Manager
+## ASPWebAPI
+.NET 8 Minimal API
 ## Minimal API Endpoints
 ### GET
 **person** - get all people\
