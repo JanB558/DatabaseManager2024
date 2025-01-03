@@ -3,6 +3,7 @@ using ASPWebAPI.Context;
 using ASPWebAPI.Services;
 using ASPWebAPI.Model;
 using System.Diagnostics;
+using ASPWebAPI.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,7 +72,7 @@ app.MapPost("/person", async (Person person, ISQLServerService sqlService) =>
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem(); 
     } 
-});
+}).AddEndpointFilter<ValidationFilter<Person>>();
 
 // UPDATE person
 app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
@@ -86,7 +87,7 @@ app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
-});
+}).AddEndpointFilter<ValidationFilter<Person>>();
 
 // DELETE person
 app.MapDelete("/person/{id}", async (int id, ISQLServerService sqlService) =>
@@ -147,7 +148,7 @@ app.MapPost("/course", async (Course course, ISQLServerService sqlService) =>
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
-});
+}).AddEndpointFilter<ValidationFilter<Course>>();
 
 //UPDATE course
 app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
@@ -162,7 +163,7 @@ app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
-});
+}).AddEndpointFilter<ValidationFilter<Course>>();
 
 //DELETE course
 app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
@@ -239,7 +240,7 @@ app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlSe
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
-});
+}).AddEndpointFilter<ValidationFilter<Enrollment>>();
 
 //UPDATE enrollment
 app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
@@ -254,7 +255,8 @@ app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlSer
         Debug.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
-});
+}).AddEndpointFilter<ValidationFilter<Enrollment>>();
+
 //DELETE enrollment
 app.MapDelete("/enrollment/{id}", async (int id, ISQLServerService sqlService) =>
 {
