@@ -1,7 +1,7 @@
 ﻿using ASPWebApp.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ASPWebApp.Dto
+namespace ASPWebApp.Models.Dto
 {
     public class CoursePageModel : PageModel
     {

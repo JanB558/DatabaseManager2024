@@ -1,4 +1,4 @@
-﻿namespace ASPWebApp.Dto
+﻿namespace ASPWebApp.Models.Dto
 {
     public class ApiResponse<T>
     {

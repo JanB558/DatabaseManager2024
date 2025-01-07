@@ -1,5 +1,5 @@
-﻿using ASPWebApp.Dto;
-using ASPWebApp.Models;
+﻿using ASPWebApp.Models;
+using ASPWebApp.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
