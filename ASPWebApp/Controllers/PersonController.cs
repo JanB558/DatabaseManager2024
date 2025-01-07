@@ -97,5 +97,22 @@ namespace ASPWebApp.Controllers
                 return StatusCode((int)response.StatusCode, "Error calling the API");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentperson/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var people = JsonConvert.DeserializeObject<List<Person>>(content);
+                if (people is null)
+                    return StatusCode((int)response.StatusCode, "No content.");
+                PersonPageModel ppm = new();
+                ppm.PersonList = people.ToList();
+                return View(ppm);
+            }
+            return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
     }
 }
