@@ -14,9 +14,7 @@ namespace ASPWebAPI.Model
         public byte[] VersionStamp { get; set; } = [];
 
         //navigation properties
-        [JsonIgnore]
         public Course? Course { get; set; }
-        [JsonIgnore]
         public Person? Person { get; set; }
 
         public void Copy(Enrollment enrollment)

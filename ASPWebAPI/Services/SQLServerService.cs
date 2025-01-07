@@ -138,14 +138,15 @@ namespace ASPWebAPI.Services
             return true;
         }
         /// <summary>
-        /// get collection of enrollments, with course details, by person Id
+        /// get collection of enrollments, with details, by person Id
         /// </summary>
         /// <param name="personID"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Enrollment>> GetEnrollmentsPersonAsync(int personID)
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsWithDetailsByPersonAsync(int personID)
         {
             return await _context.Enrollment
                 .Include(x => x.Course)
+                .Include(x => x.PersonID)
                 .Where(x => x.PersonID.Equals(personID))
                 .ToListAsync();
         }
