@@ -1,0 +1,40 @@
+﻿@using ASPWebApp.Models.Dto
+@model PersonPageModel
+
+@{
+    ViewData["Title"] = "People";
+}
+
+<h2>All people</h2>
+
+@Html.ActionLink("Create", "Create", "Person", new {@class = "btn btn-primary"})
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.PersonList ?? throw new NullReferenceException("PersonList is null"))
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>
+                    @Html.ActionLink("Update", "Update", new {id = item.ID}, new {@class = "btn btn-primary"})
+                </td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" onsubmit="return confirm('Are you sure you want to delete this person?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
