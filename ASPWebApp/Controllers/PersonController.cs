@@ -33,5 +33,69 @@ namespace ASPWebApp.Controllers
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
+
+        public async Task<IActionResult> Create(Person model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _httpClient.PostAsJsonAsync("/person", model);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error while creating entity.");
+                }
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"/person/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var person = JsonConvert.DeserializeObject<Person>(content);
+                if (person is null)
+                    return StatusCode((int)response.StatusCode, "No content.");
+                return View(person);
+            }
+            return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(Person model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _httpClient.PutAsJsonAsync("/person", model);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error while updating entity.");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/person/{id}");
+            if(response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+        }
     }
 }
