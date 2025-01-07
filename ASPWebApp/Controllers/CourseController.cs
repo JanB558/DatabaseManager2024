@@ -15,8 +15,7 @@ namespace ASPWebApp.Controllers
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _apiUrl = _configuration.GetConnectionString("ApiConnectionString"); 
-            //WARNING - CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB - IT'S JUST AN EXAMPLE
+            _apiUrl = _configuration.GetConnectionString("ApiConnectionString"); // WARNING - REAL CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB
             if (_apiUrl == null) throw new NullReferenceException("Missing connection string.");
             _httpClient.BaseAddress = new Uri(_apiUrl);
         }
@@ -28,7 +27,8 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<CoursePersonCount>>(content);
-                if (courses is null) return StatusCode(404, "List is null.");
+                if (courses is null) 
+                    return StatusCode((int)response.StatusCode, "No content.");
                 CoursePageModel cpm = new();
                 cpm.CourseList = courses.ToList();
                 return View(cpm);
@@ -61,7 +61,8 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var course = JsonConvert.DeserializeObject<Course>(content);
-                if (course is null) return StatusCode(404, "Course is null.");
+                if (course is null) 
+                    return StatusCode((int)response.StatusCode, "No content.");
                 return View(course);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");

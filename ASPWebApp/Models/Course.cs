@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASPWebApp.Models
 {
@@ -7,6 +8,7 @@ namespace ASPWebApp.Models
         public int ID { get; set; }
         [Required]
         [StringLength(50, MinimumLength = 2)]
+        [DisplayName("Course name")]
         public required string CourseName { get; set; }
         public byte[] VersionStamp { get; set; } = [];
     }
