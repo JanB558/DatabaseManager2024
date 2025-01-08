@@ -199,7 +199,7 @@ app.MapGet("/enrollment", async (ISQLServerService sqlService) =>
 });
 
 //GET all full enrolments
-app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
+app.MapGet("/enrollmentcomplete", async (ISQLServerService sqlService) =>
 {
     try
     {
@@ -214,16 +214,16 @@ app.MapGet("/enrollmentcompl", async (ISQLServerService sqlService) =>
 });
 
 //GET all enrollments for person
-app.MapGet("/enrollmentperson/{id}", async (int id, ISQLServerService sqlService) =>
+app.MapGet("/enrollmentcompleteperson/{id}", async (int id, ISQLServerService sqlService) =>
 {
     try
     {
-        var result = await sqlService.GetEnrollmentsPersonAsync(id);
+        var result = await sqlService.GetEnrollmentsWithDetailsByPersonAsync(id);
         if (result != null) return Results.Ok(result);
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
 });

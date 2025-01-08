@@ -8,5 +8,7 @@
         public DateTime EnrollmentDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public byte[] VersionStamp { get; set; } = [];
+        public Course? Course { get; set; }
+        public Person? Person { get; set; }
     }
 }

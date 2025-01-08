@@ -101,16 +101,14 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentperson/{id}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentcompleteperson/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var people = JsonConvert.DeserializeObject<List<Person>>(content);
-                if (people is null)
+                var enrollments = JsonConvert.DeserializeObject<List<Enrollment>>(content);
+                if (enrollments is null)
                     return StatusCode((int)response.StatusCode, "No content.");
-                PersonPageModel ppm = new();
-                ppm.PersonList = people.ToList();
-                return View(ppm);
+                return View(enrollments);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
