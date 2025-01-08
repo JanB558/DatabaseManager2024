@@ -1,0 +1,30 @@
+﻿@model ASPWebApp.Models.Dto.EnrollPersonPageModel
+
+@{
+    ViewData["Title"] = "Enroll";
+}
+
+<h1>Enroll</h1>
+
+<h4>@Model.FirstName @Model.LastName</h4>
+<hr />
+@using (Html.BeginForm("Enroll", "Person", FormMethod.Post))
+{
+    <div>
+        @Html.Label("Course:")
+        @Html.DropDownList("courseId", Model.Courses, "Select a course", new { @class = "form-control" })
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+<div>
+    <a asp-action="Details" asp-route-id="@Model.PersonId">Back to Details</a>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

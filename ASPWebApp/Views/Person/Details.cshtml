@@ -2,12 +2,20 @@
 @model List<Enrollment>
 
 @{
-    ViewData["Title"] = $"{Model[0].Person?.FirstName} {Model[0].Person?.LastName}";
+    //person can't be null here
+    ViewData["Title"] = $"{Model[0].Person!.FirstName} {Model[0].Person!.LastName}";
 }
 
 <h2>All enrollments of @Model[0].Person?.FirstName @Model[0].Person?.LastName</h2>
 
-@Html.ActionLink("Enroll", "Enroll", "Person", new { @class = "btn btn-primary" })
+@using (Html.BeginForm("Enroll", "Person", FormMethod.Post))
+{
+    @Html.Hidden("PersonId", Model[0].Person?.ID)
+    @Html.Hidden("FirstName", Model[0].Person?.FirstName)
+    @Html.Hidden("LastName", Model[0].Person?.LastName)
+
+    <button type="submit" class="btn btn-primary">Enroll</button>
+}
 
 <table class="table">
     <thead>

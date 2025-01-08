@@ -2,6 +2,8 @@
 using ASPWebApp.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace ASPWebApp.Controllers
 {
@@ -106,11 +108,54 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var enrollments = JsonConvert.DeserializeObject<List<Enrollment>>(content);
-                if (enrollments is null)
-                    return StatusCode((int)response.StatusCode, "No content.");
+                if (enrollments is null || enrollments.Count == 0) 
+                    return NoContent();
                 return View(enrollments);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Enroll(int personId, string firstName, string lastName)
+        {
+            var response = await _httpClient.GetAsync("/course");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var courses = JsonConvert.DeserializeObject<List<Course>>(content);
+                if (courses is null)
+                    return NoContent();
+
+                EnrollPersonPageModel model = new EnrollPersonPageModel();
+                model.Courses = courses;
+                model.PersonId = personId;
+                model.FirstName = firstName;
+                model.LastName = lastName;
+
+                return View(model);
+            }
+            return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Enroll(EnrollPersonPagePostModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Debug.WriteLine($"person {model.PersonId} course {model.CourseId}");
+                //model.Enrollment!.EnrollmentDate = DateTime.Now.ToUniversalTime();
+                //model.Enrollment.
+                //var response = await _httpClient.PostAsJsonAsync("/enrollment", model);
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    return RedirectToAction("Details", model.PersonID);
+                //}
+                //else
+                //{
+                //    ModelState.AddModelError(string.Empty, "Error while creating entity.");
+                //}
+            }
+            return View(model);
         }
     }
 }
