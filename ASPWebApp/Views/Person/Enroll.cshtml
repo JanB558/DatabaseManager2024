@@ -11,10 +11,10 @@
 @using (Html.BeginForm("Enroll", "Person", FormMethod.Post))
 {
     <div>
-        @Html.Label("Course:")
-        @Html.DropDownList("courseId", Model.Courses, "Select a course", new { @class = "form-control" })
+        @Html.LabelFor(Model => Model.SelectedCourseId)
+        @Html.DropDownListFor(Model => Model.SelectedCourseId, Model.Courses, new { @class = "form-control" })
     </div>
-    <br />
+    @Html.HiddenFor(model => model.PersonId)
     <button type="submit" class="btn btn-primary">Submit</button>
 }
 

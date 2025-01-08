@@ -8,7 +8,7 @@
 
 <h2>All enrollments of @Model[0].Person?.FirstName @Model[0].Person?.LastName</h2>
 
-@using (Html.BeginForm("Enroll", "Person", FormMethod.Post))
+@using (Html.BeginForm("EnrollRedirect", "Person", FormMethod.Post))
 {
     @Html.Hidden("PersonId", Model[0].Person?.ID)
     @Html.Hidden("FirstName", Model[0].Person?.FirstName)

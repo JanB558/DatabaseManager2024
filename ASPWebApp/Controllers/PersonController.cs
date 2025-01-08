@@ -1,6 +1,7 @@
 ﻿using ASPWebApp.Models;
 using ASPWebApp.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Reflection;
@@ -123,11 +124,21 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<Course>>(content);
-                if (courses is null)
+                if (courses is null || courses.Count == 0)
                     return NoContent();
 
-                EnrollPersonPageModel model = new EnrollPersonPageModel();
-                model.Courses = courses;
+                var courseList = courses.Select(
+                    c => new SelectListItem
+                    {
+                        Value = c.ID.ToString(),
+                        Text = c.CourseName
+                    }).ToList();
+                courseList.First().Selected = true;
+                Debug.WriteLine($"courseList {courseList.Count}");
+                Debug.WriteLine($"personId {personId}");
+
+                EnrollPersonPageModel model = new();
+                model.Courses = courseList;
                 model.PersonId = personId;
                 model.FirstName = firstName;
                 model.LastName = lastName;
@@ -138,24 +149,35 @@ namespace ASPWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Enroll(EnrollPersonPagePostModel model)
+        public async Task<IActionResult> Enroll(EnrollPersonPageModel model)
         {
             if (ModelState.IsValid)
             {
-                Debug.WriteLine($"person {model.PersonId} course {model.CourseId}");
-                //model.Enrollment!.EnrollmentDate = DateTime.Now.ToUniversalTime();
-                //model.Enrollment.
-                //var response = await _httpClient.PostAsJsonAsync("/enrollment", model);
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    return RedirectToAction("Details", model.PersonID);
-                //}
-                //else
-                //{
-                //    ModelState.AddModelError(string.Empty, "Error while creating entity.");
-                //}
+                Enrollment e = new()
+                {
+                    PersonID = model.PersonId,
+                    CourseID = model.SelectedCourseId,
+                    EnrollmentDate = DateTime.Now.ToUniversalTime(),
+                };
+                var response = await _httpClient.PostAsJsonAsync("/enrollment", e);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Return");
+                    return RedirectToAction("Details", model.PersonId);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error while creating entity.");
+                }
             }
             return View(model);
         }
+
+        #region redirect
+        public IActionResult EnrollRedirect(int personId, string firstName, string lastName)
+        {
+            return RedirectToAction("Enroll", new { personId, firstName, lastName });
+        }
+        #endregion
     }
 }
