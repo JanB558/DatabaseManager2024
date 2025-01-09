@@ -119,13 +119,32 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentcompleteperson/{id}");
+            var response = await _httpClient.GetAsync($"/enrollmentcompleteperson/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var enrollments = JsonConvert.DeserializeObject<List<Enrollment>>(content);
-                if (enrollments is null || enrollments.Count == 0) 
-                    return NoContent();
+                if (enrollments is null || enrollments.Count == 0)
+                {
+                    //no content to show, just get basic info
+                    response = await _httpClient.GetAsync($"person/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        content = await response.Content.ReadAsStringAsync();
+                        var person = JsonConvert.DeserializeObject<Person>(content);
+                        if (person is null)
+                            return NoContent();
+                        ViewBag.PersonId = person.ID;
+                        ViewBag.FirstName = person.FirstName;
+                        ViewBag.LastName = person.LastName;
+                        return View(enrollments);
+                    }
+                    return StatusCode((int)response.StatusCode, "Error calling the API");                  
+                }
+                if (enrollments[0].Person is null) return Content("API returned incomplete data. Cannot proceed.");
+                ViewBag.PersonId = enrollments[0].PersonID;
+                ViewBag.FirstName = enrollments[0].Person!.FirstName; //can't be null - we just checked above
+                ViewBag.LastName = enrollments[0].Person!.LastName;
                 return View(enrollments);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");

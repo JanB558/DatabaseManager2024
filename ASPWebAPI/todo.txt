@@ -1,7 +1,8 @@
 ﻿Add pagination
 Fix crash when api is down
 
-Allow accessing person page for empty enrollments
 Allow accessing course page for empty enrollments
 Add logger
 Adjust page models
+Add method for showing errors
+Fix no content

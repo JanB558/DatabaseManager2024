@@ -29,7 +29,7 @@
                 <td>@item.EnrollmentDate.Date.ToString("d")</td>
                 <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
                 <td>
-                        @Html.ActionLink("Details", "Details", "Person", new { id = item.ID }, new { @class = "btn btn-secondary" })
+                        @Html.ActionLink("Details", "Details", "Person", new { id = item.PersonID }, new { @class = "btn btn-secondary" })
                 </td>
             </tr>
         }

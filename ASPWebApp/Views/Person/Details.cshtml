@@ -3,51 +3,54 @@
 
 @{
     //person can't be null here
-    ViewData["Title"] = $"{Model[0].Person!.FirstName} {Model[0].Person!.LastName}";
+    ViewData["Title"] = $"{@ViewBag.FirstName} {@ViewBag.LastName}";
 }
 
-<h2>All enrollments of @Model[0].Person?.FirstName @Model[0].Person?.LastName</h2>
+<h2>Enrollments - @ViewBag.FirstName @ViewBag.LastName</h2>
 
-@Html.ActionLink("Enroll", "Enroll", new { id = Model[0].PersonID }, new { @class = "btn btn-primary" })
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Course name</th>
-            <th>Enrollment date</th>
-            <th>Completion date</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model ?? throw new NullReferenceException("Enrollments are null"))
-        {
+@Html.ActionLink("Enroll", "Enroll", new { id = ViewBag.PersonId }, new { @class = "btn btn-primary" })
+<hr />
+@if (Model is not null)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.ID</td>
-                <td>@item.Course?.CourseName</td>
-                <td>@item.EnrollmentDate.Date.ToString("d")</td>
-                <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
-                @if (item.CompletionDate is null)
-                {
-                    <td>
-                        <form asp-action="Complete" asp-route-id="@item.ID" method="post"
-                              onsubmit="return confirm('Are you sure you want to mark this course as completed?');">
-                            <button type="submit" class="btn btn-primary">Complete</button>
-                        </form>
-                    </td>
-                }
-                @if(item.CompletionDate is null) 
-                {
-                    <td>
-                        <form asp-action="DeleteEnrollment" asp-route-id="@item.ID" method="post"
-                              onsubmit="return confirm('Are you sure you want to delete this enrollment?');">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                }
+                <th>Id</th>
+                <th>Course name</th>
+                <th>Enrollment date</th>
+                <th>Completion date</th>
+                <th></th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Course?.CourseName</td>
+                    <td>@item.EnrollmentDate.Date.ToString("d")</td>
+                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
+                    @if (item.CompletionDate is null)
+                    {
+                        <td>
+                            <form asp-action="Complete" asp-route-id="@item.ID" method="post"
+                                  onsubmit="return confirm('Are you sure you want to mark this course as completed?');">
+                                <button type="submit" class="btn btn-primary">Complete</button>
+                            </form>
+                        </td>
+                    }
+                    @if (item.CompletionDate is null)
+                    {
+                        <td>
+                            <form asp-action="DeleteEnrollment" asp-route-id="@item.ID" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this enrollment?');">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
