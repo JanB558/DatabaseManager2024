@@ -212,7 +212,21 @@ app.MapGet("/enrollmentcomplete", async (ISQLServerService sqlService) =>
         return Results.Problem();
     }
 });
-
+// GET enrollment by id
+app.MapGet("/enrollment/{id}", async (int id, ISQLServerService sqlService) =>
+{
+    try
+    {
+        var result = await sqlService.GetEnrollmentAsync(id);
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 //GET all enrollments for person
 app.MapGet("/enrollmentcompleteperson/{id}", async (int id, ISQLServerService sqlService) =>
 {
@@ -252,7 +266,7 @@ app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlSer
         else return Results.BadRequest();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); //TODO add logger
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Enrollment>>();

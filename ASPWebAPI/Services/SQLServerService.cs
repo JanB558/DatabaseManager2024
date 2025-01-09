@@ -121,6 +121,10 @@ namespace ASPWebAPI.Services
                 .Include(x => x.Course)
                 .ToListAsync();
         }
+        public async Task<Enrollment?> GetEnrollmentAsync(int id)
+        {
+            return await _context.Enrollment.Where(e => e.ID == id).FirstOrDefaultAsync();
+        }
         public async Task<bool> UpdateEnrollmentAsync(Enrollment enrollment)
         {
             ArgumentNullException.ThrowIfNull(enrollment);

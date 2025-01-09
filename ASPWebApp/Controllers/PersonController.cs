@@ -37,6 +37,7 @@ namespace ASPWebApp.Controllers
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create(Person model)
         {
             if (ModelState.IsValid)
@@ -203,10 +204,47 @@ namespace ASPWebApp.Controllers
             }
             return View(model);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">enrollment id to mark as completed</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Complete(int id)
+        {
+            Debug.WriteLine("Controller Person, Action Complete");
+            HttpResponseMessage response;
+            Enrollment? enrollment;
+            //get the enrollment, and update it
+            response = await _httpClient.GetAsync($"/enrollment/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.WriteLine("Success getting the enrollment");
+                var content = await response.Content.ReadAsStringAsync();
+                enrollment = JsonConvert.DeserializeObject<Enrollment>(content);
+                if (enrollment is null)
+                    return NoContent();
+                enrollment.CompletionDate = DateTime.Now; //mark as completed, no need to convert hour to UTC since there is no hour in db
+            }
+            else
+            {
+                Debug.WriteLine("Failed to get the enrollment");
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+            //post the enrollment
+            response = await _httpClient.PutAsJsonAsync($"/enrollment", enrollment);
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.WriteLine("Successfully posted the enrollment");
+                return RedirectToAction("Details", new { id = enrollment.PersonID });
+            }
+            else
+            {
+                Debug.WriteLine("Failed to post enrollment");
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+        }
 
-        #region redirect
-
-        #endregion
         #region private_methods
         //this could be separate service
         private ICollection<SelectListItem> CourseListToSelectListItem(ICollection<Course> courses)
