@@ -1,4 +1,4 @@
 ﻿Add pagination
 Fix crash when api is down
-Fix routing
 Fix url parameters
+Fix ID skipping

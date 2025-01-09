@@ -8,14 +8,7 @@
 
 <h2>All enrollments of @Model[0].Person?.FirstName @Model[0].Person?.LastName</h2>
 
-@using (Html.BeginForm("EnrollRedirect", "Person", FormMethod.Post))
-{
-    @Html.Hidden("PersonId", Model[0].Person?.ID)
-    @Html.Hidden("FirstName", Model[0].Person?.FirstName)
-    @Html.Hidden("LastName", Model[0].Person?.LastName)
-
-    <button type="submit" class="btn btn-primary">Enroll</button>
-}
+@Html.ActionLink("Enroll", "Enroll", new { id = Model[0].PersonID }, new { @class = "btn btn-primary" })
 
 <table class="table">
     <thead>

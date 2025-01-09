@@ -117,9 +117,28 @@ namespace ASPWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Enroll(int personId, string firstName, string lastName)
-        {
-            var response = await _httpClient.GetAsync("/course");
+        public async Task<IActionResult> Enroll(int id)
+        {        
+            EnrollPersonPageModel model = new();
+            //get person data
+            var response = await _httpClient.GetAsync($"/person/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var person = JsonConvert.DeserializeObject<Person>(content);
+                if (person is null)
+                    return NoContent();
+                Debug.WriteLine($"personId {person.ID}");
+                model.PersonId = person.ID;
+                model.FirstName = person.FirstName;
+                model.LastName = person.LastName;
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+            //get course
+            response = await _httpClient.GetAsync("/course");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -127,30 +146,23 @@ namespace ASPWebApp.Controllers
                 if (courses is null || courses.Count == 0)
                     return NoContent();
 
-                var courseList = courses.Select(
-                    c => new SelectListItem
-                    {
-                        Value = c.ID.ToString(),
-                        Text = c.CourseName
-                    }).ToList();
+                var courseList = CourseListToSelectListItem(courses.ToList()).ToList();
                 courseList.First().Selected = true;
-                Debug.WriteLine($"courseList {courseList.Count}");
-                Debug.WriteLine($"personId {personId}");
-
-                EnrollPersonPageModel model = new();
-                model.Courses = courseList;
-                model.PersonId = personId;
-                model.FirstName = firstName;
-                model.LastName = lastName;
-
-                return View(model);
+                Debug.WriteLine($"courseList {courseList.Count}");                             
+                model.Courses = courseList;                         
             }
-            return StatusCode((int)response.StatusCode, "Error calling the API");
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Enroll(EnrollPersonPageModel model)
         {
+            HttpResponseMessage response;
+            //attempt to perform POST
             if (ModelState.IsValid)
             {
                 Enrollment e = new()
@@ -159,24 +171,53 @@ namespace ASPWebApp.Controllers
                     CourseID = model.SelectedCourseId,
                     EnrollmentDate = DateTime.Now.ToUniversalTime(),
                 };
-                var response = await _httpClient.PostAsJsonAsync("/enrollment", e);
+                response = await _httpClient.PostAsJsonAsync("/enrollment", e);
                 if (response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine("Return");
-                    return RedirectToAction("Details", model.PersonId);
+                    Debug.WriteLine($"{response.StatusCode} Success");
+                    return RedirectToAction("Details", new { id = model.PersonId });
                 }
                 else
                 {
+                    Debug.WriteLine($"{response.StatusCode} Error");
                     ModelState.AddModelError(string.Empty, "Error while creating entity.");
                 }
+            }
+            //POST failed - repopulate the list and go back to page
+            response = await _httpClient.GetAsync("/course");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var courses = JsonConvert.DeserializeObject<List<Course>>(content);
+                if (courses is null || courses.Count == 0)
+                    return NoContent();
+
+                var courseList = CourseListToSelectListItem(courses.ToList()).ToList();
+                courseList.First().Selected = true;
+                Debug.WriteLine($"courseList {courseList.Count}");
+                model.Courses = courseList;
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error calling the API");
             }
             return View(model);
         }
 
         #region redirect
-        public IActionResult EnrollRedirect(int personId, string firstName, string lastName)
+
+        #endregion
+        #region private_methods
+        //this could be separate service
+        private ICollection<SelectListItem> CourseListToSelectListItem(ICollection<Course> courses)
         {
-            return RedirectToAction("Enroll", new { personId, firstName, lastName });
+            var courseList = courses.Select(
+                    c => new SelectListItem
+                    {
+                        Value = c.ID.ToString(),
+                        Text = c.CourseName
+                    }).ToList();
+            return courseList;
         }
         #endregion
     }

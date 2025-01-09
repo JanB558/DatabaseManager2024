@@ -11,6 +11,9 @@
 @using (Html.BeginForm("Enroll", "Person", FormMethod.Post))
 {
     <div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+    <div>
         @Html.LabelFor(Model => Model.SelectedCourseId)
         @Html.DropDownListFor(Model => Model.SelectedCourseId, Model.Courses, new { @class = "form-control" })
     </div>
