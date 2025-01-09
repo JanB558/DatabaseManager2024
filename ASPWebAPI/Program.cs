@@ -241,7 +241,21 @@ app.MapGet("/enrollmentcompleteperson/{id}", async (int id, ISQLServerService sq
         return Results.Problem();
     }
 });
-
+//GET all enrollments for course
+app.MapGet("/enrollmentcompletecourse/{id}", async (int id, ISQLServerService sqlService) =>
+{
+    try
+    {
+        var result = await sqlService.GetEnrollmentsWithDetailsByCourseAsync(id);
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 //ADD enrollment
 app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlService) =>
 {

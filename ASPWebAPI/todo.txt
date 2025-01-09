@@ -5,6 +5,5 @@ Fix url parameters
 Fix ID skipping
 
 Display enrollments in people list
-Add enrollment completion
 Add list of people in course
 Add option to move to person from course

@@ -21,6 +21,7 @@ namespace ASPWebAPI.Services
         Task<Enrollment?> GetEnrollmentAsync(int id);
         Task<bool> UpdateEnrollmentAsync(Enrollment enrollment);
         Task<IEnumerable<Enrollment>> GetEnrollmentsWithDetailsByPersonAsync(int personID);
+        Task<IEnumerable<Enrollment>> GetEnrollmentsWithDetailsByCourseAsync(int courseID);
         Task<Enrollment> AddEnrollmentAsync(Enrollment enrollment);
         Task<bool> DeleteEnrollmentAsync(int enrollmentID);
         //

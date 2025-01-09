@@ -154,6 +154,19 @@ namespace ASPWebAPI.Services
                 .Include(x => x.Person)
                 .ToListAsync();
         }
+        /// <summary>
+        /// get collection of enrollments, with details, by course Id
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsWithDetailsByCourseAsync(int courseID)
+        {
+            return await _context.Enrollment
+                .Where(x => x.CourseID.Equals(courseID))
+                .Include(x => x.Course)
+                .Include(x => x.Person)
+                .ToListAsync();
+        }
         public async Task<Enrollment> AddEnrollmentAsync(Enrollment enrollment)
         {
             ArgumentNullException.ThrowIfNull(enrollment);
