@@ -169,7 +169,7 @@ namespace ASPWebApp.Controllers
                 {
                     PersonID = model.PersonId,
                     CourseID = model.SelectedCourseId,
-                    EnrollmentDate = DateTime.Now.ToUniversalTime(),
+                    EnrollmentDate = DateTime.Now //no need to save to UTC since DB stores it as DATE without hour
                 };
                 response = await _httpClient.PostAsJsonAsync("/enrollment", e);
                 if (response.IsSuccessStatusCode)
