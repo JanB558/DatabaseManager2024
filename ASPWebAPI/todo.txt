@@ -1,9 +1,7 @@
 ﻿Add pagination
 Fix crash when api is down
-Fix url parameters
-
-Fix ID skipping
 
 Display enrollments in people list
-Add list of people in course
-Add option to move to person from course
+Allow enrollment of person with no enrollments / allow accessing enrollment page
+Allow accessing course page for empty enrollments
+Remove delete because it doesn't make sense

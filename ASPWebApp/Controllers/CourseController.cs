@@ -100,6 +100,21 @@ namespace ASPWebApp.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentcompletecourse/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var enrollments = JsonConvert.DeserializeObject<List<Enrollment>>(content);
+                if (enrollments is null || enrollments.Count == 0)
+                    return NoContent();
+                return View(enrollments);
+            }
+            return StatusCode((int)response.StatusCode, "Error calling the API");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

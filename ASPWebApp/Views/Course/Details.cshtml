@@ -1,0 +1,37 @@
+﻿@using ASPWebApp.Models.Dto
+@model List<Enrollment>
+
+@{
+    //course can't be null here
+    ViewData["Title"] = $"{Model[0].Course!.CourseName}";
+}
+
+<h2>@Model[0].Course!.CourseName - enrollments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Enrollment date</th>
+            <th>Completion date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model ?? throw new NullReferenceException("Enrollments are null"))
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Person!.FirstName</td>
+                <td>@item.Person!.LastName</td>
+                <td>@item.EnrollmentDate.Date.ToString("d")</td>
+                <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
+                <td>
+                        @Html.ActionLink("Details", "Details", "Person", new { id = item.ID }, new { @class = "btn btn-secondary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
