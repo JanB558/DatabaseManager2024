@@ -102,6 +102,20 @@ namespace ASPWebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteEnrollment(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/enrollment/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Error calling the API");
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
