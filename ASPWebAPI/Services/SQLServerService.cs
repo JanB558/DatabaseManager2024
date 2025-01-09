@@ -199,6 +199,24 @@ namespace ASPWebAPI.Services
                     {
                         ID = course.ID,
                         CourseName = course.CourseName,
+                        VersionStamp = course.VersionStamp,
+                        EnrollmentCount = enrollments.Count()
+                    })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<PersonCourseCount>> GetPeopleWithCourseCountAsync()
+        {
+            return await _context.Person
+                .GroupJoin(
+                    _context.Enrollment,
+                    person => person.ID,
+                    enrollment => enrollment.PersonID,
+                    (person, enrollments) => new PersonCourseCount
+                    {
+                        ID = person.ID,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName,
+                        VersionStamp = person.VersionStamp,
                         EnrollmentCount = enrollments.Count()
                     })
                 .ToListAsync();

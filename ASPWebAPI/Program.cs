@@ -316,6 +316,20 @@ app.MapGet("/courseenrollmentcount", async (ISQLServerService sqlService) =>
         return Results.Problem();
     }
 });
-
+//GET people with course count
+app.MapGet("/personenrollmentcount", async (ISQLServerService sqlService) =>
+{
+    try
+    {
+        var result = await sqlService.GetPeopleWithCourseCountAsync();
+        if (result != null) return Results.Ok(result);
+        else return Results.NoContent();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message); //TODO add logger
+        return Results.Problem();
+    }
+});
 #endregion
 app.Run();

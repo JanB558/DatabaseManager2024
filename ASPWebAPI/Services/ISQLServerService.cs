@@ -26,5 +26,6 @@ namespace ASPWebAPI.Services
         Task<bool> DeleteEnrollmentAsync(int enrollmentID);
         //
         Task<IEnumerable<CoursePersonCount>> GetCoursesWithPersonCountAsync();
+        Task<IEnumerable<PersonCourseCount>> GetPeopleWithCourseCountAsync();
     }
 }

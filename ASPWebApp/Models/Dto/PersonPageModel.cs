@@ -5,6 +5,6 @@ namespace ASPWebApp.Models.Dto
 {
     public class PersonPageModel : PageModel
     {
-        public List<Person>? PersonList { get; set; }
+        public List<PersonCourseCount>? PersonList { get; set; }
     }
 }

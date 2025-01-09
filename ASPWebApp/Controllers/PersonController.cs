@@ -23,11 +23,11 @@ namespace ASPWebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("/person");
+            HttpResponseMessage response = await _httpClient.GetAsync("/personenrollmentcount");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var people = JsonConvert.DeserializeObject<List<Person>>(content);
+                var people = JsonConvert.DeserializeObject<List<PersonCourseCount>>(content);
                 if (people is null)
                     return StatusCode((int)response.StatusCode, "No content.");
                 PersonPageModel ppm = new();

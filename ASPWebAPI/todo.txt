@@ -5,3 +5,5 @@ Display enrollments in people list
 Allow enrollment of person with no enrollments / allow accessing enrollment page
 Allow accessing course page for empty enrollments
 Remove delete because it doesn't make sense
+Add logger
+Adjust page models
