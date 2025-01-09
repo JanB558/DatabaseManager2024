@@ -5,4 +5,3 @@ Add logger
 Adjust page models
 Add method for showing errors
 Fix no content
-Fix info display when there are no enrollments
