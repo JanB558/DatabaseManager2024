@@ -9,6 +9,7 @@
 **course/id** - get course by id\
 **enrollment** - get all enrollments (just enrollments)\
 **enrollmentcomplete** - get all full enrollments (contains data about people and courses)\
+**enrollmentcompletecourse/id** - get all full enrollments for course by course id\
 **enrollmentcompleteperson/id** - get all full enrollments for person by person id\
 **courseenrollmentcount** - get courses with enrollment count
 
