@@ -12,6 +12,7 @@
 **enrollmentcompletecourse/id** - get all full enrollments for course by course id\
 **enrollmentcompleteperson/id** - get all full enrollments for person by person id\
 **courseenrollmentcount** - get courses with enrollment count
+**personenrollmentcount** - get people with enrollment count
 
 ### POST
 **person**\
