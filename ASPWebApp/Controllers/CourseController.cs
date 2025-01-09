@@ -103,13 +103,29 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/enrollmentcompletecourse/{id}");
+            var response = await _httpClient.GetAsync($"/enrollmentcompletecourse/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var enrollments = JsonConvert.DeserializeObject<List<Enrollment>>(content);
                 if (enrollments is null || enrollments.Count == 0)
-                    return NoContent();
+                {
+                    //no content, adjust
+                    response = await _httpClient.GetAsync($"course/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        content = await response.Content.ReadAsStringAsync();
+                        var course = JsonConvert.DeserializeObject<Course>(content);
+                        if (course is null) return NoContent();
+                        ViewBag.CourseId = course.ID;
+                        ViewBag.CourseName = course.CourseName;
+                        return View(enrollments);
+                    }
+                    return StatusCode((int)response.StatusCode, "Error calling the API");
+                }
+                if (enrollments[0].Course is null) return Content("API returned incomplete data. Cannot proceed.");
+                ViewBag.CourseId = enrollments[0].CourseID;
+                ViewBag.CourseName = enrollments[0].Course!.CourseName; //can't be null, checked above
                 return View(enrollments);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");

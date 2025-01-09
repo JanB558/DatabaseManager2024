@@ -3,35 +3,44 @@
 
 @{
     //course can't be null here
-    ViewData["Title"] = $"{Model[0].Course!.CourseName}";
+    ViewData["Title"] = $"{ViewBag.CourseName}";
 }
 
-<h2>@Model[0].Course!.CourseName - enrollments</h2>
+<h2>Enrollments - @ViewBag.CourseName</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Enrollment date</th>
-            <th>Completion date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model ?? throw new NullReferenceException("Enrollments are null"))
-        {
+@if (Model is not null)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.ID</td>
-                <td>@item.Person!.FirstName</td>
-                <td>@item.Person!.LastName</td>
-                <td>@item.EnrollmentDate.Date.ToString("d")</td>
-                <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
-                <td>
-                        @Html.ActionLink("Details", "Details", "Person", new { id = item.PersonID }, new { @class = "btn btn-secondary" })
-                </td>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Enrollment date</th>
+                <th>Completion date</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Person!.FirstName</td>
+                    <td>@item.Person!.LastName</td>
+                    <td>@item.EnrollmentDate.Date.ToString("d")</td>
+                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", "Person", new { id = item.PersonID }, new { @class = "btn btn-secondary" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>
+        <p>There are no enrolled people in this course.</p>
+    </div>
+}
