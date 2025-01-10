@@ -1,5 +1,4 @@
-﻿@using ASPWebApp.Models.Dto
-@model CoursePageModel
+﻿@model List<CoursePersonCount>
 
 @{
     ViewData["Title"] = "Courses";
@@ -22,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.CourseList ?? throw new NullReferenceException("CourseList is null."))
+        @foreach (var item in Model)
         {
             <tr>
                 <td>@item.ID</td>

@@ -1,11 +1,11 @@
-﻿@using ASPWebApp.Models.Dto
-@model PersonPageModel
+﻿@using ASPWebApp.Models
+@model List<PersonCourseCount>
 
 @{
     ViewData["Title"] = "People";
 }
 
-<h2>All people</h2>
+<h2>People</h2>
 
 @Html.ActionLink("Create", "Create", "Person", new {@class = "btn btn-primary"})
 
@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model.PersonList ?? throw new NullReferenceException("PersonList is null"))
+        @foreach(var item in Model)
         {
             <tr>
                 <td>@item.ID</td>

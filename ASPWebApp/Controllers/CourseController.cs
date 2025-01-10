@@ -1,5 +1,4 @@
 ﻿using ASPWebApp.Models;
-using ASPWebApp.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -29,9 +28,7 @@ namespace ASPWebApp.Controllers
                 var courses = JsonConvert.DeserializeObject<List<CoursePersonCount>>(content);
                 if (courses is null) 
                     return StatusCode((int)response.StatusCode, "No content.");
-                CoursePageModel cpm = new();
-                cpm.CourseList = courses.ToList();
-                return View(cpm);
+                return View(courses);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
         }
