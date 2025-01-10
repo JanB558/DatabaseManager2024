@@ -26,8 +26,6 @@ namespace ASPWebApp.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<CoursePersonCount>>(content);
-                if (courses is null)
-                    return NoContent();
                 return View(courses);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");

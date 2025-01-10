@@ -2,4 +2,3 @@
 Fix crash when api is down
 
 Add method for showing errors
-Allow accessing people and courses when list is null

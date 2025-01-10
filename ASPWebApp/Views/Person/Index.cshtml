@@ -8,7 +8,9 @@
 <h2>People</h2>
 
 @Html.ActionLink("Create", "Create", "Person", new {@class = "btn btn-primary"})
-
+<hr/>
+@if(Model is not null && Model.Count > 0)
+{
 <table class="table">
     <thead>
         <tr>
@@ -47,3 +49,10 @@
         }
     </tbody>
 </table>
+}
+else
+{
+    <div>
+        <p>There are no people to show.</p>
+    </div>
+}
