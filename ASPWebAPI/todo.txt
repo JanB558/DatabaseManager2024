@@ -1,7 +1,5 @@
 ﻿Add pagination
 Fix crash when api is down
 
-Adjust page models
 Add method for showing errors
-Fix no content
 Allow accessing people and courses when list is null
