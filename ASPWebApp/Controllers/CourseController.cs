@@ -1,27 +1,24 @@
 ﻿using ASPWebApp.Models;
+using ASPWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace ASPWebApp.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        private readonly string? _apiUrl;
-        public CourseController(HttpClient httpClient, IConfiguration configuration)
+        private readonly IAPIService<Course> _apiService;
+        public CourseController(IAPIService<Course> apiService)
         {
-            _httpClient = httpClient;
-            _configuration = configuration;
-            _apiUrl = _configuration.GetConnectionString("ApiConnectionString"); // WARNING - REAL CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB
-            if (_apiUrl == null) throw new NullReferenceException("Missing connection string.");
-            _httpClient.BaseAddress = new Uri(_apiUrl);
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("/courseenrollmentcount");
+            var response = await _apiService.Get("/courseenrollmentcount");
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -35,7 +32,8 @@ namespace ASPWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _httpClient.PostAsJsonAsync("/course", model);
+                var response = await _apiService.Post("/course", model);
+                if (response == null) return Content("500 Internal Server Error");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -51,7 +49,8 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/course/{id}");
+            var response = await _apiService.Get("/course", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -68,7 +67,8 @@ namespace ASPWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _httpClient.PutAsJsonAsync("/course", model);
+                var response = await _apiService.Put("/course", model);
+                if (response == null) return Content("500 Internal Server Error");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -84,7 +84,8 @@ namespace ASPWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/course/{id}");
+            var response = await _apiService.Delete("/course", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -98,7 +99,8 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetAsync($"/enrollmentcompletecourse/{id}");
+            var response = await _apiService.Get("/enrollmentcompletecourse", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -106,17 +108,19 @@ namespace ASPWebApp.Controllers
                 if (enrollments is null || enrollments.Count == 0)
                 {
                     //no content, adjust
-                    response = await _httpClient.GetAsync($"course/{id}");
-                    if (response.IsSuccessStatusCode)
+                    //response = await _httpClient.GetAsync($"course/{id}");
+                    var response2 = await _apiService.Get("/course", id);
+                    if (response2 == null) return Content("500 Internal Server Error");
+                    if (response2.IsSuccessStatusCode)
                     {
-                        content = await response.Content.ReadAsStringAsync();
+                        content = await response2.Content.ReadAsStringAsync();
                         var course = JsonConvert.DeserializeObject<Course>(content);
                         if (course is null) return Content($"204 No Content");
                         ViewBag.CourseId = course.ID;
                         ViewBag.CourseName = course.CourseName;
                         return View(enrollments);
                     }
-                    return StatusCode((int)response.StatusCode, "Error calling the API");
+                    return StatusCode((int)response2.StatusCode, "Error calling the API");
                 }
                 if (enrollments[0].Course is null) return Content("API returned incomplete data. Cannot proceed.");
                 ViewBag.CourseId = enrollments[0].CourseID;

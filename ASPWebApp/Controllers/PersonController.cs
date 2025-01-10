@@ -1,4 +1,5 @@
 ﻿using ASPWebApp.Models;
+using ASPWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -9,21 +10,18 @@ namespace ASPWebApp.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        private readonly string? _apiUrl;
-        public PersonController(HttpClient httpClient, IConfiguration configuration)
+        private readonly IAPIService<Person> _apiService;
+        private readonly IAPIService<Enrollment> _apiEnrollmentService;
+        public PersonController(IAPIService<Person> apiService, IAPIService<Enrollment> apiService2)
         {
-            _httpClient = httpClient;
-            _configuration = configuration;
-            _apiUrl = _configuration.GetConnectionString("ApiConnectionString"); // WARNING - REAL CONNECTION STRING SHOULD NOT BE PUSHED TO GITHUB
-            if (_apiUrl == null) throw new NullReferenceException("Missing connection string.");
-            _httpClient.BaseAddress = new Uri(_apiUrl);
+            _apiService = apiService;
+            _apiEnrollmentService = apiService2;
         }
 
         public async Task<IActionResult> Index()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("/personenrollmentcount");
+            var response = await _apiService.Get("/personenrollmentcount");
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -38,7 +36,8 @@ namespace ASPWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _httpClient.PostAsJsonAsync("/person", model);
+                var response = await _apiService.Post("/person", model);
+                if (response == null) return Content("500 Internal Server Error");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -54,7 +53,8 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/person/{id}");
+            var response = await _apiService.Get("/person", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -71,7 +71,8 @@ namespace ASPWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _httpClient.PutAsJsonAsync("/person", model);
+                var response = await _apiService.Put("/person", model);
+                if (response == null) return Content("500 Internal Server Error");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
@@ -87,8 +88,9 @@ namespace ASPWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/person/{id}");
-            if(response.IsSuccessStatusCode)
+            var response = await _apiService.Delete("/person", id);
+            if (response == null) return Content("500 Internal Server Error");
+            if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
@@ -101,7 +103,8 @@ namespace ASPWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteEnrollment(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/enrollment/{id}");
+            var response = await _apiService.Delete("/enrollment", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -115,7 +118,8 @@ namespace ASPWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetAsync($"/enrollmentcompleteperson/{id}");
+            var response = await _apiService.Get("/enrollmentcompleteperson", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -123,10 +127,11 @@ namespace ASPWebApp.Controllers
                 if (enrollments is null || enrollments.Count == 0)
                 {
                     //no content to show, just get basic info
-                    response = await _httpClient.GetAsync($"person/{id}");
-                    if (response.IsSuccessStatusCode)
+                    var response2 = await _apiService.Get("/person", id);
+                    if (response2 == null) return Content("500 Internal Server Error");
+                    if (response2.IsSuccessStatusCode)
                     {
-                        content = await response.Content.ReadAsStringAsync();
+                        content = await response2.Content.ReadAsStringAsync();
                         var person = JsonConvert.DeserializeObject<Person>(content);
                         if (person is null)
                             return Content($"204 No Content");
@@ -135,7 +140,7 @@ namespace ASPWebApp.Controllers
                         ViewBag.LastName = person.LastName;
                         return View(enrollments);
                     }
-                    return StatusCode((int)response.StatusCode, "Error calling the API");                  
+                    return StatusCode((int)response2.StatusCode, "Error calling the API");                  
                 }
                 if (enrollments[0].Person is null) return Content("API returned incomplete data. Cannot proceed.");
                 ViewBag.PersonId = enrollments[0].PersonID;
@@ -151,7 +156,8 @@ namespace ASPWebApp.Controllers
         {        
             EnrollPersonPageModel model = new();
             //get person data
-            var response = await _httpClient.GetAsync($"/person/{id}");
+            var response = await _apiService.Get("/person", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -168,7 +174,8 @@ namespace ASPWebApp.Controllers
                 return StatusCode((int)response.StatusCode, "Error calling the API");
             }
             //get course
-            response = await _httpClient.GetAsync("/course");
+            response = await _apiService.Get("/course");
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -191,7 +198,7 @@ namespace ASPWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Enroll(EnrollPersonPageModel model)
         {
-            HttpResponseMessage response;
+            HttpResponseMessage? response;
             //attempt to perform POST
             if (ModelState.IsValid)
             {
@@ -201,7 +208,8 @@ namespace ASPWebApp.Controllers
                     CourseID = model.SelectedCourseId,
                     EnrollmentDate = DateTime.Now //no need to save to UTC since DB stores it as DATE without hour
                 };
-                response = await _httpClient.PostAsJsonAsync("/enrollment", e);
+                response = await _apiEnrollmentService.Post("/enrollment", e);
+                if (response == null) return Content("500 Internal Server Error");
                 if (response.IsSuccessStatusCode)
                 {
                     Debug.WriteLine($"{response.StatusCode} Success");
@@ -214,7 +222,8 @@ namespace ASPWebApp.Controllers
                 }
             }
             //POST failed - repopulate the list and go back to page
-            response = await _httpClient.GetAsync("/course");
+            response = await _apiService.Get("/course");
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -242,10 +251,11 @@ namespace ASPWebApp.Controllers
         public async Task<IActionResult> Complete(int id)
         {
             Debug.WriteLine("Controller Person, Action Complete");
-            HttpResponseMessage response;
+            HttpResponseMessage? response;
             Enrollment? enrollment;
             //get the enrollment, and update it
-            response = await _httpClient.GetAsync($"/enrollment/{id}");
+            response = await _apiService.Get("/enrollment", id);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 Debug.WriteLine("Success getting the enrollment");
@@ -260,8 +270,9 @@ namespace ASPWebApp.Controllers
                 Debug.WriteLine("Failed to get the enrollment");
                 return StatusCode((int)response.StatusCode, "Error calling the API");
             }
-            //post the enrollment
-            response = await _httpClient.PutAsJsonAsync($"/enrollment", enrollment);
+            //post/update the enrollment
+            response = await _apiEnrollmentService.Put("/enrollment", enrollment);
+            if (response == null) return Content("500 Internal Server Error");
             if (response.IsSuccessStatusCode)
             {
                 Debug.WriteLine("Successfully posted the enrollment");

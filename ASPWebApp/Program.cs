@@ -1,9 +1,13 @@
+using ASPWebApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 //add http client
 builder.Services.AddHttpClient();
+
+builder.Services.AddTransient(typeof(IAPIService<>), typeof(APIService<>));
 
 var app = builder.Build();
 
