@@ -1,7 +1,6 @@
 ﻿Add pagination
 Fix crash when api is down
 
-Add logger
 Adjust page models
 Add method for showing errors
 Fix no content

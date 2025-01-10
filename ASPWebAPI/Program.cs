@@ -39,7 +39,7 @@ app.MapGet("/person", async (ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -54,7 +54,7 @@ app.MapGet("/person/{id}", async (int id, ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -69,7 +69,7 @@ app.MapPost("/person", async (Person person, ISQLServerService sqlService) =>
     }
     catch (Exception ex) 
     { 
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); 
         return Results.Problem(); 
     } 
 }).AddEndpointFilter<ValidationFilter<Person>>();
@@ -84,7 +84,7 @@ app.MapPut("/person", async (Person person, ISQLServerService sqlService) =>
         else return Results.BadRequest();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Person>>();
@@ -99,7 +99,7 @@ app.MapDelete("/person/{id}", async (int id, ISQLServerService sqlService) =>
         else return Results.NotFound();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -116,7 +116,7 @@ app.MapGet("/course", async (ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -131,7 +131,7 @@ app.MapGet("/course/{id}", async (int id, ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -145,7 +145,7 @@ app.MapPost("/course", async (Course course, ISQLServerService sqlService) =>
         return Results.Created();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); 
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Course>>();
@@ -160,7 +160,7 @@ app.MapPut("/course", async (Course course, ISQLServerService sqlService) =>
         else return Results.BadRequest();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Course>>();
@@ -175,7 +175,7 @@ app.MapDelete("/course/{id}", async (int id, ISQLServerService sqlService) =>
         else return Results.NotFound();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); 
         return Results.Problem();
     }
 });
@@ -193,7 +193,7 @@ app.MapGet("/enrollment", async (ISQLServerService sqlService) =>
     }
     catch (Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); 
         return Results.Problem();
     }
 });
@@ -208,7 +208,7 @@ app.MapGet("/enrollmentcomplete", async (ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -223,7 +223,7 @@ app.MapGet("/enrollment/{id}", async (int id, ISQLServerService sqlService) =>
     }
     catch (Exception ex)
     {
-        Console.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -237,7 +237,7 @@ app.MapGet("/enrollmentcompleteperson/{id}", async (int id, ISQLServerService sq
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Console.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -252,7 +252,7 @@ app.MapGet("/enrollmentcompletecourse/{id}", async (int id, ISQLServerService sq
     }
     catch (Exception ex)
     {
-        Console.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -265,7 +265,7 @@ app.MapPost("/enrollment", async (Enrollment enrollment, ISQLServerService sqlSe
         return Results.Created();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Enrollment>>();
@@ -280,7 +280,7 @@ app.MapPut("/enrollment", async (Enrollment enrollment, ISQLServerService sqlSer
         else return Results.BadRequest();
     }catch(Exception ex)
     {
-        Console.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 }).AddEndpointFilter<ValidationFilter<Enrollment>>();
@@ -295,7 +295,7 @@ app.MapDelete("/enrollment/{id}", async (int id, ISQLServerService sqlService) =
         else return Results.NotFound();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message); 
         return Results.Problem();
     }
 });
@@ -312,7 +312,7 @@ app.MapGet("/courseenrollmentcount", async (ISQLServerService sqlService) =>
         else return Results.NoContent();
     }catch(Exception ex)
     {
-        Debug.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
@@ -327,7 +327,7 @@ app.MapGet("/personenrollmentcount", async (ISQLServerService sqlService) =>
     }
     catch (Exception ex)
     {
-        Console.WriteLine(ex.Message); //TODO add logger
+        Console.WriteLine(ex.Message);
         return Results.Problem();
     }
 });
