@@ -20,6 +20,7 @@ namespace ASPWebApp.Controllers
             if (_apiUrl == null) throw new NullReferenceException("Missing connection string.");
             _httpClient.BaseAddress = new Uri(_apiUrl);
         }
+
         public async Task<IActionResult> Index()
         {
             HttpResponseMessage response = await _httpClient.GetAsync("/personenrollmentcount");
@@ -59,7 +60,7 @@ namespace ASPWebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var person = JsonConvert.DeserializeObject<Person>(content);
                 if (person is null)
-                    return NoContent();
+                    return Content($"204 No Content");
                 return View(person);
             }
             return StatusCode((int)response.StatusCode, "Error calling the API");
@@ -128,7 +129,7 @@ namespace ASPWebApp.Controllers
                         content = await response.Content.ReadAsStringAsync();
                         var person = JsonConvert.DeserializeObject<Person>(content);
                         if (person is null)
-                            return NoContent();
+                            return Content($"204 No Content");
                         ViewBag.PersonId = person.ID;
                         ViewBag.FirstName = person.FirstName;
                         ViewBag.LastName = person.LastName;
@@ -156,7 +157,7 @@ namespace ASPWebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var person = JsonConvert.DeserializeObject<Person>(content);
                 if (person is null)
-                    return NoContent();
+                    return Content("204 No Content");
                 Debug.WriteLine($"personId {person.ID}");
                 model.PersonId = person.ID;
                 model.FirstName = person.FirstName;
@@ -173,7 +174,7 @@ namespace ASPWebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<Course>>(content);
                 if (courses is null || courses.Count == 0)
-                    return NoContent();
+                    return Content($"204 No Content");
 
                 var courseList = CourseListToSelectListItem(courses.ToList()).ToList();
                 courseList.First().Selected = true;
@@ -219,7 +220,7 @@ namespace ASPWebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var courses = JsonConvert.DeserializeObject<List<Course>>(content);
                 if (courses is null || courses.Count == 0)
-                    return NoContent();
+                    return Content("204 No Content");
 
                 var courseList = CourseListToSelectListItem(courses.ToList()).ToList();
                 courseList.First().Selected = true;
@@ -251,7 +252,7 @@ namespace ASPWebApp.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 enrollment = JsonConvert.DeserializeObject<Enrollment>(content);
                 if (enrollment is null)
-                    return NoContent();
+                    return Content("204 No Content");
                 enrollment.CompletionDate = DateTime.Now; //mark as completed, no need to convert hour to UTC since there is no hour in db
             }
             else
@@ -286,5 +287,11 @@ namespace ASPWebApp.Controllers
             return courseList;
         }
         #endregion
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }
