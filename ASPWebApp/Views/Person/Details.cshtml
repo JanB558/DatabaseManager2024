@@ -28,8 +28,8 @@
                 <tr>
                     <td>@item.ID</td>
                     <td>@item.Course?.CourseName</td>
-                    <td>@item.EnrollmentDate.Date.ToString("d")</td>
-                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
+                    <td>@item.EnrollmentDate.Date.ToLocalTime().ToString("d")</td>
+                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToLocalTime().ToString("d") : "Unfinished")</td>
                     @if (item.CompletionDate is null)
                     {
                         <td>

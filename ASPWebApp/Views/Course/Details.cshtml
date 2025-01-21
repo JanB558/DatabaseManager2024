@@ -27,8 +27,8 @@
                     <td>@item.ID</td>
                     <td>@item.Person!.FirstName</td>
                     <td>@item.Person!.LastName</td>
-                    <td>@item.EnrollmentDate.Date.ToString("d")</td>
-                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToString("d") : "Unfinished")</td>
+                    <td>@item.EnrollmentDate.Date.ToLocalTime().ToString("d")</td>
+                    <td>@(item.CompletionDate.HasValue ? item.CompletionDate!.Value.Date.ToLocalTime().ToString("d") : "Unfinished")</td>
                     <td>
                         @Html.ActionLink("Details", "Details", "Person", new { id = item.PersonID }, new { @class = "btn btn-secondary" })
                     </td>

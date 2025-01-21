@@ -206,7 +206,7 @@ namespace ASPWebApp.Controllers
                 {
                     PersonID = model.PersonId,
                     CourseID = model.SelectedCourseId,
-                    EnrollmentDate = DateTime.Now //no need to save to UTC since DB stores it as DATE without hour
+                    EnrollmentDate = DateTime.Now.ToUniversalTime()
                 };
                 response = await _apiEnrollmentService.Post("/enrollment", e);
                 if (response == null) return Content("500 Internal Server Error");
@@ -263,7 +263,7 @@ namespace ASPWebApp.Controllers
                 enrollment = JsonConvert.DeserializeObject<Enrollment>(content);
                 if (enrollment is null)
                     return Content("204 No Content");
-                enrollment.CompletionDate = DateTime.Now; //mark as completed, no need to convert hour to UTC since there is no hour in db
+                enrollment.CompletionDate = DateTime.Now.ToUniversalTime(); //mark as completed
             }
             else
             {
