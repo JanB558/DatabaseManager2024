@@ -1,7 +1,14 @@
-# Example Database Manager
-## ASPWebAPI
-.NET 8 Minimal API
-## Minimal API Endpoints
+# Database Manager 2024
+Example Database Manager project.
+
+# API
+Minimal API. Full error handling and logging included.
+
+## Used technology
+- .NET 8
+- Microsoft SQL Server
+  
+## API Endpoints
 ### GET
 **person** - get all people\
 **person/id** - get person by id\
@@ -28,3 +35,18 @@
 **person/id**\
 **course/id**\
 **enrollment/id**
+
+# Web App
+ASP.NET user interface for API.
+
+## Key features
+- create, edit, delete courses
+- create, edit, delete people
+- add people to courses
+- delete people from courses
+- mark courses as complete
+
+## Used technology
+- .NET 8
+- ASP.NET MVC
+- Bootstrap
